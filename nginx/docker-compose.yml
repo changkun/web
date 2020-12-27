@@ -1,0 +1,20 @@
+# Copyright 2020 Changkun Ou. All rights reserved.
+# Use of this source code is governed by a GPL-3.0
+# license that can be found in the LICENSE file.
+
+version: '3'
+
+services:
+  www:
+    image: nginx:stable-alpine
+    restart: always
+    volumes:
+      - /www:/usr/share/nginx/html
+    deploy:
+      replicas: 3
+    networks:
+      - traefik_proxy
+
+networks:
+  traefik_proxy:
+    external: true

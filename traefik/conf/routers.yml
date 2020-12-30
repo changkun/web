@@ -34,6 +34,7 @@ http:
       tls:
         certResolver: changkunResolver
       middlewares:
+        - gzipcompress
         - blog-errorpages
       service: blog
     to-us:
@@ -134,6 +135,8 @@ http:
       basicAuth:
         users:
           - "changkun:$2y$05$LDfRDyrTzFVaTw.KKz/9I.7Ko/OvZv2MBj9tWM4bf2VMu08xoATiK"
+    gzipcompress:
+      compress: {}
   services:
     main:
       loadBalancer:

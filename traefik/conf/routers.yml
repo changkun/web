@@ -10,6 +10,7 @@ http:
       tls:
         certResolver: changkunResolver
       middlewares:
+        - gzipcompress
         - main-errorpages
       service: main
     # github.com/changkun/talks
@@ -26,6 +27,7 @@ http:
       tls:
         certResolver: changkunResolver
       middlewares:
+        - gzipcompress
         - main-errorpages
       service: modern-cpp
     # github.com/changkun/blog

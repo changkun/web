@@ -1,0 +1,28 @@
+# Copyright 2021 Changkun Ou. All rights reserved.
+# Use of this source code is governed by a GPL-3.0
+# license that can be found in the LICENSE file.
+
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+entryPoints:
+  web:
+    address: :80
+
+providers:
+  file:
+    directory: /etc/traefik/conf/
+    watch: true
+
+api:
+  insecure: false
+  dashboard: true
+
+ping:
+  entryPoint: "traefik"
+
+log:
+  filePath: "/logs/traefik.log"
+accessLog:
+  filePath: "/logs/access.log"

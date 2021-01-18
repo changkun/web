@@ -1,0 +1,131 @@
+# Copyright 2021 Changkun Ou. All rights reserved.
+# Use of this source code is governed by a GPL-3.0
+# license that can be found in the LICENSE file.
+
+http:
+  routers:
+    # github.com/changkun/main
+    to-main:
+      rule: "Host(`localhost`)"
+      middlewares:
+        - main-errorpages
+      service: main
+    # github.com/changkun/talks
+    to-talks:
+      rule: "Host(`localhost`)&&(Path(`/talks`)||PathPrefix(`/talks/`))"
+      middlewares:
+        - main-errorpages
+      service: talks
+    # github.com/changkun/modern-cpp-tutorial
+    to-modern-cpp:
+      rule: "Host(`localhost`)&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`))"
+      middlewares:
+        - main-errorpages
+      service: modern-cpp
+    # github.com/changkun/blog
+    to-blog:
+      rule: "Host(`blog.localhost`)"
+      middlewares:
+        - blog-errorpages
+      service: blog
+    # github.com/changkun/redir
+    to-redir:
+      rule: "Host(`localhost`)&&(Path(`/{redir:[srx]}`)||PathPrefix(`/{redir:[srx]}/`))"
+      middlewares:
+        - main-errorpages
+      service: redir
+    # github.com/changkun/midgard
+    to-midgard:
+      rule: "Host(`localhost`)&&PathPrefix(`/midgard`)"
+      middlewares:
+        - main-errorpages
+      service: midgard
+    # github.com/changkun/upbot
+    to-upbot:
+      rule: "Host(`localhost`)&&PathPrefix(`/upbot`)"
+      middlewares:
+        - main-errorpages
+      service: upbot
+    # github.com/changkun/go-under-the-hood
+    to-golang:
+      rule: "Host(`localhost`)&&(Path(`/golang`)||PathPrefix(`/golang/`))"
+      middlewares:
+        - golang-redirector
+      service: main
+    # github.com/changkun/ssaplayground
+    to-gossa:
+      rule: "Host(`localhost`)&&(Path(`/gossa`)||PathPrefix(`/gossa/`))"
+      middlewares:
+        - gossa-redirector
+      service: main
+    dashboard:
+      rule: Host(`traefik.changkun.de`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      service: api@internal
+      middlewares:
+        - auth
+  middlewares:
+    golang-redirector:
+      redirectRegex:
+        regex: "^(.*)changkun.de/golang(.*)"
+        replacement: "https://golang.design/under-the-hood/${2}"
+        permanent: true
+    gossa-redirector:
+      redirectRegex:
+        regex: "^(.*)changkun.de/gossa(.*)"
+        replacement: "https://golang.design/gossa/${2}"
+        permanent: true
+    info-redirector:
+      redirectRegex:
+        regex: "^(.*)changkun.info/(.*)"
+        replacement: "https://blog.changkun.de/${2}"
+        permanent: true
+    us-redirector:
+      redirectRegex:
+        regex: "^(.*)changkun.us/(.*)"
+        replacement: "https://blog.changkun.de/${2}"
+        permanent: true
+    main-errorpages:
+      errors:
+        status:
+          - "404"
+        service: main
+        query: "/404.html"
+    blog-errorpages:
+      errors:
+        status:
+          - "404"
+        service: blog
+        query: "/404.html"
+    auth:
+      basicAuth:
+        users:
+          - "changkun:$2y$05$LDfRDyrTzFVaTw.KKz/9I.7Ko/OvZv2MBj9tWM4bf2VMu08xoATiK"
+  services:
+    main:
+      loadBalancer:
+        servers:
+        - url: http://main
+    talks:
+      loadBalancer:
+        servers:
+        - url: http://talks
+    modern-cpp:
+      loadBalancer:
+        servers:
+        - url: http://www
+    blog:
+      loadBalancer:
+        servers:
+        - url: http://blog
+    redir:
+      loadBalancer:
+        servers:
+        - url: http://redir
+    midgard:
+      loadBalancer:
+        servers:
+        - url: http://midgard
+    upbot:
+      loadBalancer:
+        servers:
+        - url: http://upbot

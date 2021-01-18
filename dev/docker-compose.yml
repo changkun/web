@@ -1,0 +1,24 @@
+# Copyright 2021 Changkun Ou. All rights reserved.
+# Use of this source code is governed by a GPL-3.0
+# license that can be found in the LICENSE file.
+
+version: '3'
+
+services:
+  traefik:
+    container_name: traefik
+    image: traefik:v2.2
+    ports:
+      - "80:80"
+      - "8080:8080"
+    networks:
+      - proxy
+    volumes:
+      - ./traefik.yml:/etc/traefik/traefik.yml
+      - ./conf:/etc/traefik/conf
+      - ./logs:/logs
+networks:
+  proxy:
+    name: traefik_proxy
+    driver:
+      bridge

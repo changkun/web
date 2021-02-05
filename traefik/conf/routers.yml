@@ -61,6 +61,13 @@ http:
       middlewares:
         - main-errorpages
       service: redir
+    to-urlstat:
+      rule: "Host(`changkun.de`)&&(Path(`/urlstat`)||PathPrefix(`/urlstat/`))"
+      tls:
+        certResolver: changkunResolver
+      middlewares:
+        - main-errorpages
+      service: urlstat
     # github.com/changkun/midgard
     to-midgard:
       rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&PathPrefix(`/midgard`)"
@@ -160,6 +167,10 @@ http:
       loadBalancer:
         servers:
         - url: http://redir
+    urlstat:
+      loadBalancer:
+        servers:
+        - url: http://urlstat
     midgard:
       loadBalancer:
         servers:

@@ -34,6 +34,11 @@ http:
       middlewares:
         - main-errorpages
       service: redir
+    to-urlstat:
+      rule: "Host(`localhost`)&&(Path(`/urlstat`)||PathPrefix(`/urlstat/`))"
+      middlewares:
+        - main-errorpages
+      service: urlstat
     # github.com/changkun/midgard
     to-midgard:
       rule: "Host(`localhost`)&&PathPrefix(`/midgard`)"
@@ -121,6 +126,10 @@ http:
       loadBalancer:
         servers:
         - url: http://redir
+    urlstat:
+      loadBalancer:
+        servers:
+        - url: http://urlstat
     midgard:
       loadBalancer:
         servers:

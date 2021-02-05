@@ -53,6 +53,13 @@ http:
       middlewares:
         - info-redirector
       service: blog
+    to-urlstat:
+      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&PathPrefix(`/urlstat`)"
+      tls:
+        certResolver: changkunResolver
+      middlewares:
+        - main-errorpages
+      service: urlstat
     # github.com/changkun/redir
     to-redir:
       rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&(Path(`/{redir:[srx]}`)||PathPrefix(`/{redir:[srx]}/`))"
@@ -61,13 +68,6 @@ http:
       middlewares:
         - main-errorpages
       service: redir
-    to-urlstat:
-      rule: "Host(`changkun.de`)&&(Path(`/urlstat`)||PathPrefix(`/urlstat/`))"
-      tls:
-        certResolver: changkunResolver
-      middlewares:
-        - main-errorpages
-      service: urlstat
     # github.com/changkun/midgard
     to-midgard:
       rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&PathPrefix(`/midgard`)"

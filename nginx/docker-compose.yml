@@ -11,7 +11,7 @@ services:
     volumes:
       - /www:/usr/share/nginx/html
     deploy:
-      replicas: 3
+      replicas: 1
     networks:
       - traefik_proxy
 

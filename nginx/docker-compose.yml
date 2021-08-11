@@ -6,7 +6,7 @@ version: '3'
 
 services:
   www:
-    image: nginx:stable-alpine
+    image: changkun/nginx:latest
     restart: always
     volumes:
       - /www:/usr/share/nginx/html

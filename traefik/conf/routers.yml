@@ -22,14 +22,14 @@ http:
         - main-errorpages
       service: talks
     # github.com/changkun/modern-cpp-tutorial
-    to-modern-cpp:
-      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`))"
+    to-nginx:
+      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/countdown/`)||PathPrefix(`/demos/`))"
       tls:
         certResolver: changkunResolver
       middlewares:
         - gzipcompress
         - main-errorpages
-      service: modern-cpp
+      service: nginx
     # github.com/changkun/blog
     to-blog:
       rule: "Host(`blog.changkun.de`)"
@@ -155,7 +155,7 @@ http:
       loadBalancer:
         servers:
         - url: http://talks
-    modern-cpp:
+    nginx:
       loadBalancer:
         servers:
         - url: http://www

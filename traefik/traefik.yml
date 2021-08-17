@@ -24,6 +24,12 @@ certificatesResolvers:
       storage: /etc/traefik/conf/acme.json
       httpChallenge:
         entryPoint: web
+  polyredResolver:
+    acme:
+      email: hi@changkun.de
+      storage: /etc/traefik/conf/acme-polyred.json
+      httpChallenge:
+        entryPoint: web
 
 providers:
   file:

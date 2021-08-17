@@ -107,6 +107,15 @@ http:
         certResolver: changkunResolver
       middlewares:
         - auth
+    # github.com/polyred/server
+    to-polyred:
+      rule: "Host(`poly.red`)"
+      tls:
+        certResolver: polyredResolver
+      middlewares:
+        - gzipcompress
+        # - main-errorpages # TODO: add error handler
+      service: polyred
   middlewares:
     golang-redirector:
       redirectRegex:
@@ -179,3 +188,7 @@ http:
       loadBalancer:
         servers:
         - url: http://upbot
+    polyred:
+      loadBalancer:
+        servers:
+        - url: http://polyred

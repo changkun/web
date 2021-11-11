@@ -30,6 +30,12 @@ certificatesResolvers:
       storage: /etc/traefik/conf/acme-polyred.json
       httpChallenge:
         entryPoint: web
+  golangdesignResolver:
+    acme:
+      email: hi@changkun.de
+      storage: /etc/traefik/conf/acme-golangdesign.json
+      httpChallenge:
+        entryPoint: web
 
 providers:
   file:
@@ -38,7 +44,7 @@ providers:
 
 api:
   insecure: false
-  dashboard: true
+  dashboard: false
 
 ping:
   entryPoint: "traefik"

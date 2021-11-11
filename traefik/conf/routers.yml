@@ -6,7 +6,7 @@ http:
   routers:
     # github.com/changkun/main
     to-main:
-      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)"
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -15,7 +15,7 @@ http:
       service: main
     # github.com/changkun/talks
     to-talks:
-      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&(Path(`/talks`)||PathPrefix(`/talks/`))"
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&(Path(`/talks`)||PathPrefix(`/talks/`))
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -23,7 +23,7 @@ http:
       service: talks
     # github.com/changkun/modern-cpp-tutorial
     to-nginx:
-      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/countdown/`)||PathPrefix(`/demos/`))"
+      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/consent`)||PathPrefix(`/demos/`))"
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -86,20 +86,18 @@ http:
       service: upbot
     # github.com/changkun/go-under-the-hood
     to-golang:
-      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&(Path(`/golang`)||PathPrefix(`/golang/`))"
+      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&(PathPrefix(`/golang`)"
       tls:
         certResolver: changkunResolver
       middlewares:
         - golang-redirector
       service: main
-    # github.com/changkun/ssaplayground
+    # github.com/golang-design/ssaplayground
     to-gossa:
-      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&(Path(`/gossa`)||PathPrefix(`/gossa/`))"
+      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`, `golang.design`, `www.golang.design`)&&(Path(`/gossa`)||PathPrefix(`/gossa/`))"
       tls:
         certResolver: changkunResolver
-      middlewares:
-        - gossa-redirector
-      service: main
+      service: gossa
     dashboard:
       rule: Host(`traefik.changkun.de`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
       service: api@internal
@@ -116,17 +114,39 @@ http:
         - gzipcompress
         # - main-errorpages # TODO: add error handler
       service: polyred
+    to-code2img:
+      rule: Host(`golang.design`, `www.golang.design`) && PathPrefix(`/api/v1/code2img`)
+      service: code2img
+      tls:
+        certResolver: golangdesignResolver
+      middlewares:
+        - golang-errorpages
+    to-golangdesign-redir:
+      rule: Host(`golang.design`, `www.golang.design`) && (Path(`/{golangdesign-redir:[srx]}`)||PathPrefix(`/{golangdesign-redir:[srx]}/`))
+      service: golangdesign-redir
+      tls:
+        certResolver: golangdesignResolver
+      middlewares:
+        - golang-errorpages
+    to-golangdesign:
+      rule: Host(`golang.design`, `www.golang.design`) && (Path(`/`)||Path(`/{name:(.*)}.html`)||Path(`/{name:(.*)}.js`)||Path(`/{name:(.*).css}`)||Path(`/{name:(.*).svg}`)||PathPrefix(`/history`)||PathPrefix(`/under-the-hood`)||PathPrefix(`/research`)||PathPrefix(`/miner`)||PathPrefix(`/go-questions`))
+      tls:
+        certResolver: golangdesignResolver
+      middlewares:
+        - gzipcompress
+        - golang-errorpages
+      service: nginx-golang
   middlewares:
     golang-redirector:
       redirectRegex:
         regex: "^(.*)changkun.de/golang(.*)"
         replacement: "https://golang.design/under-the-hood/${2}"
         permanent: true
-    gossa-redirector:
-      redirectRegex:
-        regex: "^(.*)changkun.de/gossa(.*)"
-        replacement: "https://golang.design/gossa/${2}"
-        permanent: true
+    # gossa-redirector:
+    #  redirectRegex:
+    #    regex: "^(.*)changkun.de/gossa(.*)"
+    #    replacement: "https://golang.design/gossa/${2}"
+    #    permanent: true
     info-redirector:
       redirectRegex:
         regex: "^(.*)changkun.info/(.*)"
@@ -142,6 +162,12 @@ http:
         status:
           - "404"
         service: main
+        query: "/404.html"
+    golang-errorpages:
+      errors:
+        status:
+          - "404"
+        service: nginx-golang
         query: "/404.html"
     blog-errorpages:
       errors:
@@ -168,6 +194,10 @@ http:
       loadBalancer:
         servers:
         - url: http://www
+    nginx-golang:
+      loadBalancer:
+        servers:
+        - url: http://www-golang
     blog:
       loadBalancer:
         servers:
@@ -176,6 +206,10 @@ http:
       loadBalancer:
         servers:
         - url: http://redir
+    golangdesign-redir:
+      loadBalancer:
+        servers:
+        - url: http://golangdesign-redir
     urlstat:
       loadBalancer:
         servers:
@@ -188,6 +222,14 @@ http:
       loadBalancer:
         servers:
         - url: http://upbot
+    gossa:
+      loadBalancer:
+        servers:
+        - url: http://gossa
+    code2img:
+      loadBalancer:
+        servers:
+        - url: http://code2img
     polyred:
       loadBalancer:
         servers:

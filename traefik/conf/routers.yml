@@ -6,7 +6,7 @@ http:
   routers:
     # github.com/changkun/main
     to-main:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -15,7 +15,7 @@ http:
       service: main
     # github.com/changkun/talks
     to-talks:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&(Path(`/talks`)||PathPrefix(`/talks/`))
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/talks`)||PathPrefix(`/talks/`))
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -23,7 +23,7 @@ http:
       service: talks
     # github.com/changkun/modern-cpp-tutorial
     to-nginx:
-      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/consent`)||PathPrefix(`/demos/`))"
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/consent`)||PathPrefix(`/demos/`))
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -32,7 +32,7 @@ http:
       service: nginx
     # github.com/changkun/blog
     to-blog:
-      rule: "Host(`blog.changkun.de`)"
+      rule: Host(`blog.changkun.de`)
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -40,21 +40,21 @@ http:
         - blog-errorpages
       service: blog
     to-us:
-      rule: "Host(`changkun.us`, `www.changkun.us`, `ou.changkun.us`)"
+      rule: Host(`changkun.us`, `www.changkun.us`, `ou.changkun.us`)
       tls:
         certResolver: changkunResolver
       middlewares:
         - us-redirector
       service: blog
     to-info:
-      rule: "Host(`changkun.info`, `www.changkun.info`, `ou.changkun.info`)"
+      rule: Host(`changkun.info`, `www.changkun.info`, `ou.changkun.info`)
       tls:
         certResolver: changkunResolver
       middlewares:
         - info-redirector
       service: blog
     to-urlstat:
-      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&PathPrefix(`/urlstat`)"
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&PathPrefix(`/urlstat`)
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -62,7 +62,7 @@ http:
       service: urlstat
     # github.com/changkun/redir
     to-redir:
-      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&(Path(`/{redir:[srx]}`)||PathPrefix(`/{redir:[srx]}/`))"
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/{redir:[srx]}`)||PathPrefix(`/{redir:[srx]}/`))
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -70,7 +70,7 @@ http:
       service: redir
     # github.com/changkun/midgard
     to-midgard:
-      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&PathPrefix(`/midgard`)"
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&PathPrefix(`/midgard`)
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -78,7 +78,7 @@ http:
       service: midgard
     # github.com/changkun/upbot
     to-upbot:
-      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&PathPrefix(`/upbot`)"
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&PathPrefix(`/upbot`)
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -86,7 +86,7 @@ http:
       service: upbot
     # github.com/changkun/go-under-the-hood
     to-golang:
-      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`)&&(PathPrefix(`/golang`)"
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(PathPrefix(`/golang`)
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -94,7 +94,7 @@ http:
       service: main
     # github.com/golang-design/ssaplayground
     to-gossa:
-      rule: "Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `dev.changkun.de`, `golang.design`, `www.golang.design`)&&(Path(`/gossa`)||PathPrefix(`/gossa/`))"
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `golang.design`, `www.golang.design`)&&(Path(`/gossa`)||PathPrefix(`/gossa/`))
       tls:
         certResolver: changkunResolver
       service: gossa

@@ -4,6 +4,12 @@
 
 http:
   routers:
+    # github.com/changkun/login
+    to-login:
+      rule: Host(`login.changkun.de`)
+      tls:
+        certResolver: changkunResolver
+      service: login
     # github.com/changkun/main
     to-main:
       rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)
@@ -68,6 +74,14 @@ http:
       middlewares:
         - main-errorpages
       service: redir
+
+    # github.com/changkun/void
+    to-void:
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/void`)||PathPrefix(`/void/`))
+      service: void
+      tls:
+        certResolver: changkunResolver
+
     # github.com/changkun/midgard
     to-midgard:
       rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&PathPrefix(`/midgard`)
@@ -129,7 +143,7 @@ http:
       middlewares:
         - golang-errorpages
     to-golangdesign:
-      rule: Host(`golang.design`, `www.golang.design`) && (Path(`/`)||Path(`/{name:(.*)}.html`)||Path(`/{name:(.*)}.js`)||Path(`/{name:(.*).css}`)||Path(`/{name:(.*).svg}`)||PathPrefix(`/history`)||PathPrefix(`/under-the-hood`)||PathPrefix(`/research`)||PathPrefix(`/miner`)||PathPrefix(`/go-questions`))
+      rule: Host(`golang.design`, `www.golang.design`) && (Path(`/`)||Path(`/index.html`)||Path(`/404.html`)||Path(`/sponsors.html`)||Path(`/icons/talkgo.png`)||Path(`/static/{name:(.*)}.js`)||Path(`/static/{name:(.*)}.css`)||Path(`/favicon.svg`)||Path(`/favicon.ico`)||Path(`/favicon.png`)||PathPrefix(`/history`)||PathPrefix(`/under-the-hood`)||PathPrefix(`/research`)||PathPrefix(`/miner`)||PathPrefix(`/go-questions`))
       tls:
         certResolver: golangdesignResolver
       middlewares:
@@ -142,11 +156,6 @@ http:
         regex: "^(.*)changkun.de/golang(.*)"
         replacement: "https://golang.design/under-the-hood/${2}"
         permanent: true
-    # gossa-redirector:
-    #  redirectRegex:
-    #    regex: "^(.*)changkun.de/gossa(.*)"
-    #    replacement: "https://golang.design/gossa/${2}"
-    #    permanent: true
     info-redirector:
       redirectRegex:
         regex: "^(.*)changkun.info/(.*)"
@@ -182,6 +191,10 @@ http:
     gzipcompress:
       compress: {}
   services:
+    login:
+      loadBalancer:
+        servers:
+        - url: http://login
     main:
       loadBalancer:
         servers:
@@ -234,3 +247,7 @@ http:
       loadBalancer:
         servers:
         - url: http://polyred
+    void:
+      loadBalancer:
+        servers:
+        - url: http://void

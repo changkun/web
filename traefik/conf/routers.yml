@@ -136,7 +136,7 @@ http:
       middlewares:
         - golang-errorpages
     to-golangdesign-redir:
-      rule: Host(`golang.design`, `www.golang.design`) && (Path(`/{golangdesign-redir:[srx]}`)||PathPrefix(`/{golangdesign-redir:[srx]}/`))
+      rule: Host(`golang.design`, `www.golang.design`) && (Path(`/{golangdesign-redir:[sx]}`)||PathPrefix(`/{golangdesign-redir:[sx]}/`))
       service: golangdesign-redir
       tls:
         certResolver: golangdesignResolver
@@ -149,7 +149,7 @@ http:
       middlewares:
         - gzipcompress
         - golang-errorpages
-      service: nginx-golang
+      service: static-golang
   middlewares:
     golang-redirector:
       redirectRegex:
@@ -176,7 +176,7 @@ http:
       errors:
         status:
           - "404"
-        service: nginx-golang
+        service: static-golang
         query: "/404.html"
     blog-errorpages:
       errors:
@@ -211,6 +211,14 @@ http:
       loadBalancer:
         servers:
         - url: http://www-golang
+    static-changkun:
+      loadBalancer:
+        servers:
+        - url: http://www-changkunde
+    static-golang:
+      loadBalancer:
+        servers:
+        - url: http://www-golangdesign
     blog:
       loadBalancer:
         servers:

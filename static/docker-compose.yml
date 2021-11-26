@@ -15,6 +15,8 @@ services:
     environment:
       STATIC_ADDR: :80
       STATIC_FOLDER: /www/changkun.de
+      NEWRELIC_NAME: changkun
+      NEWRELIC_LICENSE: ${NEWRELIC_LICENSE}
     networks:
       - traefik_proxy
   www-golangdesign:
@@ -27,6 +29,8 @@ services:
     environment:
       STATIC_ADDR: :80
       STATIC_FOLDER: /www/golang.design
+      NEWRELIC_NAME: golang-design
+      NEWRELIC_LICENSE: ${NEWRELIC_LICENSE}
     networks:
       - traefik_proxy
 

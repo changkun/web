@@ -1,0 +1,29 @@
+# Copyright 2020 Changkun Ou. All rights reserved.
+# Use of this source code is governed by a GPL-3.0
+# license that can be found in the LICENSE file.
+
+version: '3'
+
+services:
+  www:
+    image: changkun/nginx:latest
+    restart: always
+    volumes:
+      - /www:/usr/share/nginx/html
+    deploy:
+      replicas: 1
+    networks:
+      - traefik_proxy
+  www-golang:
+    image: changkun/nginx:latest
+    restart: always
+    volumes:
+      - /www/golang.design:/usr/share/nginx/html
+    deploy:
+      replicas: 1
+    networks:
+      - traefik_proxy
+
+networks:
+  traefik_proxy:
+    external: true

@@ -17,8 +17,7 @@ var (
 	wrapper = newrelic.WrapHandle
 )
 
-func init() {
-	log.SetPrefix("static:")
+func initApp() {
 	name := os.Getenv("NEWRELIC_NAME")
 	lice := os.Getenv("NEWRELIC_LICENSE")
 
@@ -45,9 +44,10 @@ func init() {
 }
 
 func main() {
-	log.SetPrefix("static:")
+	log.SetPrefix("static: ")
 	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds | log.Lshortfile)
 	l := logging()
+	initApp()
 
 	addr := os.Getenv("STATIC_ADDR")
 	if addr == "" {

@@ -5,22 +5,28 @@
 version: '3'
 
 services:
-  www:
-    image: changkun/nginx:latest
+  www-changkunde:
+    image: static:latest
     restart: always
     volumes:
-      - /www:/usr/share/nginx/html
+      - /www/changkun.de:/www/changkun.de
     deploy:
       replicas: 1
+    environment:
+      STATIC_ADDR: :80
+      STATIC_FOLDER: /www/changkun.de
     networks:
       - traefik_proxy
-  www-golang:
-    image: changkun/nginx:latest
+  www-golangdesign:
+    image: static:latest
     restart: always
     volumes:
-      - /www/golang.design:/usr/share/nginx/html
+      - /www/golang.design:/www/golang.design
     deploy:
       replicas: 1
+    environment:
+      STATIC_ADDR: :80
+      STATIC_FOLDER: /www/golang.design
     networks:
       - traefik_proxy
 

@@ -28,14 +28,14 @@ http:
         - main-errorpages
       service: talks
     # github.com/changkun/modern-cpp-tutorial
-    to-nginx:
+    to-static-changkun:
       rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/consent`)||PathPrefix(`/demos/`))
       tls:
         certResolver: changkunResolver
       middlewares:
         - gzipcompress
         - main-errorpages
-      service: nginx
+      service: static-changkun
     # github.com/changkun/blog
     to-blog:
       rule: Host(`blog.changkun.de`)
@@ -112,16 +112,9 @@ http:
       tls:
         certResolver: changkunResolver
       service: gossa
-    dashboard:
-      rule: Host(`traefik.changkun.de`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
-      service: api@internal
-      tls:
-        certResolver: changkunResolver
-      middlewares:
-        - auth
     # github.com/polyred/server
     to-polyred:
-      rule: "Host(`poly.red`)"
+      rule: Host(`poly.red`)
       tls:
         certResolver: polyredResolver
       middlewares:
@@ -184,10 +177,6 @@ http:
           - "404"
         service: blog
         query: "/404.html"
-    auth:
-      basicAuth:
-        users:
-          - "changkun:$2y$05$LDfRDyrTzFVaTw.KKz/9I.7Ko/OvZv2MBj9tWM4bf2VMu08xoATiK"
     gzipcompress:
       compress: {}
   services:
@@ -203,14 +192,6 @@ http:
       loadBalancer:
         servers:
         - url: http://talks
-    nginx:
-      loadBalancer:
-        servers:
-        - url: http://www
-    nginx-golang:
-      loadBalancer:
-        servers:
-        - url: http://www-golang
     static-changkun:
       loadBalancer:
         servers:

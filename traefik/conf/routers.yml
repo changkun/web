@@ -59,6 +59,7 @@ http:
       middlewares:
         - info-redirector
       service: blog
+    # github.com/changkun/urlstat
     to-urlstat:
       rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&PathPrefix(`/urlstat`)
       tls:
@@ -119,8 +120,8 @@ http:
         certResolver: polyredResolver
       middlewares:
         - gzipcompress
-        # - main-errorpages # TODO: add error handler
       service: polyred
+    # github.com/golang-design/code2img
     to-code2img:
       rule: Host(`golang.design`, `www.golang.design`) && PathPrefix(`/api/v1/code2img`)
       service: code2img
@@ -128,6 +129,7 @@ http:
         certResolver: golangdesignResolver
       middlewares:
         - golang-errorpages
+    # github.com/golang-design/redir
     to-golangdesign-redir:
       rule: Host(`golang.design`, `www.golang.design`) && (Path(`/{golangdesign-redir:[sx]}`)||PathPrefix(`/{golangdesign-redir:[sx]}/`))
       service: golangdesign-redir
@@ -135,6 +137,10 @@ http:
         certResolver: golangdesignResolver
       middlewares:
         - golang-errorpages
+    # github.com/golang-design/website
+    # github.com/golang-design/research
+    # github.com/golang-design/under-the-hood
+    # github.com/golang-design/go-questions
     to-golangdesign:
       rule: Host(`golang.design`, `www.golang.design`) && (Path(`/`)||Path(`/index.html`)||Path(`/404.html`)||Path(`/sponsors.html`)||Path(`/icons/talkgo.png`)||Path(`/static/{name:(.*)}.js`)||Path(`/static/{name:(.*)}.css`)||Path(`/favicon.svg`)||Path(`/favicon.ico`)||Path(`/favicon.png`)||PathPrefix(`/history`)||PathPrefix(`/under-the-hood`)||PathPrefix(`/research`)||PathPrefix(`/miner`)||PathPrefix(`/go-questions`))
       tls:

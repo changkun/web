@@ -79,11 +79,6 @@ http:
         regex: "^(.*)changkun.de/gossa(.*)"
         replacement: "https://golang.design/gossa/${2}"
         permanent: true
-    info-redirector:
-      redirectRegex:
-        regex: "^(.*)changkun.info/(.*)"
-        replacement: "https://blog.changkun.de/${2}"
-        permanent: true
     us-redirector:
       redirectRegex:
         regex: "^(.*)changkun.us/(.*)"

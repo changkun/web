@@ -52,13 +52,6 @@ http:
       middlewares:
         - us-redirector
       service: blog
-    to-info:
-      rule: Host(`changkun.info`, `www.changkun.info`, `ou.changkun.info`)
-      tls:
-        certResolver: changkunResolver
-      middlewares:
-        - info-redirector
-      service: blog
     # github.com/changkun/urlstat
     to-urlstat:
       rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&PathPrefix(`/urlstat`)
@@ -154,11 +147,6 @@ http:
       redirectRegex:
         regex: "^(.*)changkun.de/golang(.*)"
         replacement: "https://golang.design/under-the-hood/${2}"
-        permanent: true
-    info-redirector:
-      redirectRegex:
-        regex: "^(.*)changkun.info/(.*)"
-        replacement: "https://blog.changkun.de/${2}"
         permanent: true
     us-redirector:
       redirectRegex:

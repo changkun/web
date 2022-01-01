@@ -29,7 +29,7 @@ http:
       service: talks
     # github.com/changkun/modern-cpp-tutorial
     to-static-changkun:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/consent`)||PathPrefix(`/demos/`))
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/blog`)||PathPrefix(`/consent`)||PathPrefix(`/demos/`))
       tls:
         certResolver: changkunResolver
       middlewares:

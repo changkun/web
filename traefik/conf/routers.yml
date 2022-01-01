@@ -28,6 +28,7 @@ http:
         - main-errorpages
       service: talks
     # github.com/changkun/modern-cpp-tutorial
+    # github.com/changkun/blog
     to-static-changkun:
       rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/blog`)||PathPrefix(`/consent`)||PathPrefix(`/demos/`))
       tls:
@@ -42,16 +43,15 @@ http:
       tls:
         certResolver: changkunResolver
       middlewares:
-        - gzipcompress
-        - blog-errorpages
-      service: blog
+        - blog-redirector
+      service: static-changkun
     to-us:
       rule: Host(`changkun.us`, `www.changkun.us`, `ou.changkun.us`)
       tls:
         certResolver: changkunResolver
       middlewares:
         - us-redirector
-      service: blog
+      service: static-changkun
     # github.com/changkun/urlstat
     to-urlstat:
       rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&PathPrefix(`/urlstat`)
@@ -151,7 +151,12 @@ http:
     us-redirector:
       redirectRegex:
         regex: "^(.*)changkun.us/(.*)"
-        replacement: "https://blog.changkun.de/${2}"
+        replacement: "https://changkun.de/blog/${2}"
+        permanent: true
+    blog-redirector:
+      redirectRegex:
+        regex: "^(.*)blog.changkun.de/(.*)"
+        replacement: "https://changkun.de/blog/${2}"
         permanent: true
     main-errorpages:
       errors:
@@ -194,10 +199,6 @@ http:
       loadBalancer:
         servers:
         - url: http://www-golangdesign
-    blog:
-      loadBalancer:
-        servers:
-        - url: http://blog
     redir:
       loadBalancer:
         servers:

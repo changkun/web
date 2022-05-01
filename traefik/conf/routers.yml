@@ -19,18 +19,26 @@ http:
         - gzipcompress
         - main-errorpages
       service: main
+    # github.com/changkun/research
+    to-research:
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/research`)||PathPrefix(`/research/`))
+      tls:
+        certResolver: changkunResolver
+      middlewares:
+        - main-errorpages
+      service: research
     # github.com/changkun/talks
     to-talks:
       rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/talks`)||PathPrefix(`/talks/`))
       tls:
         certResolver: changkunResolver
       middlewares:
-        - main-errorpages
-      service: talks
+        - talks-redirector
+      service: static-changkun
     # github.com/changkun/modern-cpp-tutorial
     # github.com/changkun/blog
     to-static-changkun:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/blog`)||PathPrefix(`/consent`)||PathPrefix(`/demos/`))
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/blog`)||PathPrefix(`/consent`)||PathPrefix(`/bibtidy`)||PathPrefix(`/demos/`))
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -143,6 +151,11 @@ http:
         - golang-errorpages
       service: static-golang
   middlewares:
+    talks-redirector:
+      redirectRegex:
+        regex: "^(.*)changkun.de/talks(.*)"
+        replacement: "https://changkun.de/research/talks${2}"
+        permanent: true
     golang-redirector:
       redirectRegex:
         regex: "^(.*)changkun.de/golang(.*)"
@@ -191,6 +204,10 @@ http:
       loadBalancer:
         servers:
         - url: http://talks
+    research:
+      loadBalancer:
+        servers:
+        - url: http://research
     static-changkun:
       loadBalancer:
         servers:

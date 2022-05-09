@@ -27,13 +27,16 @@ http:
       middlewares:
         - main-errorpages
       service: research
-    # github.com/changkun/talks
+    # research relevant redirectors
     to-talks:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/talks`)||PathPrefix(`/talks/`))
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/talk`)||PathPrefix(`/talk/`)||PathPrefix(`/teach`)||PathPrefix(`/teach/`)||PathPrefix(`/thesis`)||PathPrefix(`/thesis/`)||PathPrefix(`/paper`)||PathPrefix(`/paper/`))
       tls:
         certResolver: changkunResolver
       middlewares:
-        - talks-redirector
+        - talk-redirector
+        - teach-redirector
+        - thesis-redirector
+        - paper-redirector
       service: static-changkun
     # github.com/changkun/modern-cpp-tutorial
     # github.com/changkun/blog
@@ -151,10 +154,25 @@ http:
         - golang-errorpages
       service: static-golang
   middlewares:
-    talks-redirector:
+    talk-redirector:
       redirectRegex:
-        regex: "^(.*)changkun.de/talks(.*)"
+        regex: "^(.*)changkun.de/talk(.*)"
         replacement: "https://changkun.de/research/talks${2}"
+        permanent: true
+    teach-redirector:
+      redirectRegex:
+        regex: "^(.*)changkun.de/teach(.*)"
+        replacement: "https://changkun.de/research/teach${2}"
+        permanent: true
+    thesis-redirector:
+      redirectRegex:
+        regex: "^(.*)changkun.de/thesis(.*)"
+        replacement: "https://changkun.de/research/thesis${2}"
+        permanent: true
+    paper-redirector:
+      redirectRegex:
+        regex: "^(.*)changkun.de/paper(.*)"
+        replacement: "https://changkun.de/research/papers${2}"
         permanent: true
     golang-redirector:
       redirectRegex:

@@ -164,8 +164,8 @@ http:
         permanent: true
     talk-redirector:
       redirectRegex:
-        regex: "^(.*)changkun.de/talk(.*)"
-        replacement: "https://changkun.de/research/talks${2}"
+        regex: "^(.*)changkun.de/talk/(.*)"
+        replacement: "https://changkun.de/research/talks/${2}"
         permanent: true
     teach-redirector:
       redirectRegex:
@@ -189,8 +189,8 @@ http:
         permanent: true
     paper-redirector:
       redirectRegex:
-        regex: "^(.*)changkun.de/paper(.*)"
-        replacement: "https://changkun.de/research/papers${2}"
+        regex: "^(.*)changkun.de/paper/(.*)"
+        replacement: "https://changkun.de/research/papers/${2}"
         permanent: true
     golang-redirector:
       redirectRegex:

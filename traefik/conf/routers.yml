@@ -29,13 +29,16 @@ http:
       service: research
     # research relevant redirectors
     to-talks:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/talk`)||PathPrefix(`/talk/`)||Path(`/talks`)||PathPrefix(`/talks/`)||PathPrefix(`/teach`)||PathPrefix(`/teach/`)||PathPrefix(`/thesis`)||PathPrefix(`/thesis/`)||PathPrefix(`/theses`)||PathPrefix(`/theses/`)||PathPrefix(`/paper`)||PathPrefix(`/paper/`)||PathPrefix(`/papers`)||PathPrefix(`/papers/`))
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/talk`)||PathPrefix(`/talk/`)||Path(`/talks`)||PathPrefix(`/talks/`)||PathPrefix(`/teach`)||PathPrefix(`/teach/`)||PathPrefix(`/thesis`)||PathPrefix(`/thesis/`)||PathPrefix(`/theses`)||PathPrefix(`/theses/`)||PathPrefix(`/paper`)||PathPrefix(`/paper/`))
       tls:
         certResolver: changkunResolver
       middlewares:
+        - talks-redirector
         - talk-redirector
         - teach-redirector
+        - theses-redirector
         - thesis-redirector
+        - papers-redirector
         - paper-redirector
       service: static-changkun
     # github.com/changkun/modern-cpp-tutorial
@@ -154,6 +157,11 @@ http:
         - golang-errorpages
       service: static-golang
   middlewares:
+    talks-redirector:
+      redirectRegex:
+        regex: "^(.*)changkun.de/talks(.*)"
+        replacement: "https://changkun.de/research/talks${2}"
+        permanent: true
     talk-redirector:
       redirectRegex:
         regex: "^(.*)changkun.de/talk(.*)"
@@ -164,10 +172,20 @@ http:
         regex: "^(.*)changkun.de/teach(.*)"
         replacement: "https://changkun.de/research/teach${2}"
         permanent: true
+    theses-redirector:
+      redirectRegex:
+        regex: "^(.*)changkun.de/theses(.*)"
+        replacement: "https://changkun.de/research/thesis${2}"
+        permanent: true
     thesis-redirector:
       redirectRegex:
         regex: "^(.*)changkun.de/thesis(.*)"
         replacement: "https://changkun.de/research/thesis${2}"
+        permanent: true
+    papers-redirector:
+      redirectRegex:
+        regex: "^(.*)changkun.de/papers(.*)"
+        replacement: "https://changkun.de/research/papers${2}"
         permanent: true
     paper-redirector:
       redirectRegex:
@@ -218,10 +236,6 @@ http:
       loadBalancer:
         servers:
         - url: http://main
-    talks:
-      loadBalancer:
-        servers:
-        - url: http://talks
     research:
       loadBalancer:
         servers:

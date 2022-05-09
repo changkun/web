@@ -102,7 +102,7 @@ http:
       service: upbot
     # github.com/changkun/go-under-the-hood
     to-golang:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(PathPrefix(`/golang`)
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&PathPrefix(`/golang`)
       tls:
         certResolver: changkunResolver
       middlewares:

@@ -29,7 +29,7 @@ http:
       service: research
     # research relevant redirectors
     to-talks:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/talk`)||PathPrefix(`/talk/`)||PathPrefix(`/teach`)||PathPrefix(`/teach/`)||PathPrefix(`/thesis`)||PathPrefix(`/thesis/`)||PathPrefix(`/paper`)||PathPrefix(`/paper/`))
+      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/talk`)||PathPrefix(`/talk/`)||Path(`/talks`)||PathPrefix(`/talks/`)||PathPrefix(`/teach`)||PathPrefix(`/teach/`)||PathPrefix(`/thesis`)||PathPrefix(`/thesis/`)||PathPrefix(`/theses`)||PathPrefix(`/theses/`)||PathPrefix(`/paper`)||PathPrefix(`/paper/`)||PathPrefix(`/papers`)||PathPrefix(`/papers/`))
       tls:
         certResolver: changkunResolver
       middlewares:

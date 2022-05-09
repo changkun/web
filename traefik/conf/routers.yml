@@ -175,12 +175,12 @@ http:
     theses-redirector:
       redirectRegex:
         regex: "^(.*)changkun.de/theses(.*)"
-        replacement: "https://changkun.de/research/thesis${2}"
+        replacement: "https://changkun.de/research/theses${2}"
         permanent: true
     thesis-redirector:
       redirectRegex:
         regex: "^(.*)changkun.de/thesis(.*)"
-        replacement: "https://changkun.de/research/thesis${2}"
+        replacement: "https://changkun.de/research/theses${2}"
         permanent: true
     papers-redirector:
       redirectRegex:

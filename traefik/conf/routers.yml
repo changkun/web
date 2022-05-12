@@ -122,7 +122,7 @@ http:
       service: gossa
     # github.com/polyred/website
     to-polyred:
-      rule: Host(`poly.red`)
+      rule: Host(`poly.red`, `polyred.org`, `polyred.de`, `poly.graphics`, `polyred.graphics`)
       tls:
         certResolver: polyredResolver
       middlewares:

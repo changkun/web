@@ -120,7 +120,7 @@ http:
       tls:
         certResolver: changkunResolver
       service: gossa
-    # github.com/polyred/server
+    # github.com/polyred/website
     to-polyred:
       rule: Host(`poly.red`)
       tls:

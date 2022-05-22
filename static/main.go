@@ -8,46 +8,12 @@ import (
 	"net/http"
 	"os"
 	"strings"
-
-	"github.com/newrelic/go-agent/v3/newrelic"
 )
-
-var (
-	app     *newrelic.Application
-	wrapper = newrelic.WrapHandle
-)
-
-func initApp() {
-	name := os.Getenv("NEWRELIC_NAME")
-	lice := os.Getenv("NEWRELIC_LICENSE")
-
-	if name == "" || lice == "" {
-		// Don't use NewRelic is name or license is missing.
-		wrapper = func(app *newrelic.Application, pattern string, handler http.Handler) (string, http.Handler) {
-			return pattern, handler
-		}
-		log.Println("NewRelic is deactivated.")
-		return
-	}
-
-	var err error
-	app, err = newrelic.NewApplication(
-		newrelic.ConfigAppName(name),
-		newrelic.ConfigLicense(lice),
-		newrelic.ConfigDistributedTracerEnabled(true),
-	)
-	if err != nil {
-		log.Fatalf("Failed to created NewRelic application: %v", err)
-	}
-
-	log.Println("NewRelic is activated.")
-}
 
 func main() {
 	log.SetPrefix("static: ")
 	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds | log.Lshortfile)
 	l := logging()
-	initApp()
 
 	addr := os.Getenv("STATIC_ADDR")
 	if addr == "" {
@@ -58,8 +24,16 @@ func main() {
 		log.Fatal("failed to serve folder outside /www folder.")
 	}
 
-	http.Handle(wrapper(app, "/", l(http.FileServer(http.Dir(folder)))))
+	http.Handle("/", l(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Allow CORS for all /demos requests
+		if strings.Contains(r.URL.Path, "/demos") {
+			w.Header().Set("Access-Control-Allow-Headers", "*")
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		}
 
+		http.FileServer(http.Dir(folder)).ServeHTTP(w, r)
+	})))
 	log.Println("Listening on http://static:80...")
 	err := http.ListenAndServe(addr, nil)
 	if err != nil {

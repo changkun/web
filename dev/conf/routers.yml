@@ -10,12 +10,12 @@ http:
       middlewares:
         - main-errorpages
       service: main
-    # github.com/changkun/talks
-    to-talks:
-      rule: "Host(`localhost`)&&(Path(`/talks`)||PathPrefix(`/talks/`))"
+    # github.com/changkun/research
+    to-research:
+      rule: Host(`localhost`)&&(Path(`/research`)||PathPrefix(`/research/`))
       middlewares:
         - main-errorpages
-      service: talks
+      service: research
     # github.com/changkun/modern-cpp-tutorial
     to-modern-cpp:
       rule: "Host(`localhost`)&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`))"
@@ -62,7 +62,7 @@ http:
       rule: "Host(`localhost`)&&(Path(`/gossa`)||PathPrefix(`/gossa/`))"
       middlewares:
         - gossa-redirector
-      service: main
+      service: gossa
     dashboard:
       rule: Host(`traefik.changkun.de`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
       service: api@internal
@@ -133,3 +133,11 @@ http:
       loadBalancer:
         servers:
         - url: http://upbot
+    gossa:
+      loadBalancer:
+        servers:
+        - url: http://gossa
+    research:
+      loadBalancer:
+        servers:
+        - url: http://research

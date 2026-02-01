@@ -126,7 +126,14 @@ http:
       tls:
         certResolver: changkunResolver
       middlewares:
+        - llm-ui-redirect
+        - llm-headers
         - llm-stripprefix
+      service: llm
+    to-llm-assets:
+      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&PathPrefix(`/litellm-asset-prefix/`)
+      tls:
+        certResolver: changkunResolver
       service: llm
     # github.com/polyred/website
     to-polyred:
@@ -220,6 +227,15 @@ http:
       stripPrefix:
         prefixes:
           - /llm
+    llm-headers:
+      headers:
+        customRequestHeaders:
+          X-Forwarded-Prefix: /llm
+    llm-ui-redirect:
+      redirectRegex:
+        regex: "^(.*)/llm/ui$"
+        replacement: "${1}/llm/ui/"
+        permanent: false
     main-errorpages:
       errors:
         status:

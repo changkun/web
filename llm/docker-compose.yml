@@ -16,6 +16,8 @@ services:
     command: ["--config", "/app/config.yaml", "--port", "4000"]
     environment:
       - PROXY_BASE_URL=https://changkun.de/llm
+      - FORWARDED_ALLOW_IPS=*
+      - ROOT_PATH=/llm
     networks:
       - traefik_proxy
 

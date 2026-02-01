@@ -11,11 +11,13 @@ services:
       - "4000:4000"
     volumes:
       - ./config.yaml:/app/config.yaml
+      - ./data:/app/data
     env_file:
       - .env
     command: ["--config", "/app/config.yaml", "--port", "4000"]
     environment:
       - PROXY_BASE_URL=https://llm.changkun.de
+      - DATABASE_URL=sqlite:///app/data/litellm.db
     networks:
       - traefik_proxy
 

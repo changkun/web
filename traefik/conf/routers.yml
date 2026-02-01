@@ -122,16 +122,7 @@ http:
         certResolver: changkunResolver
       service: gossa
     to-llm:
-      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/llm`)||PathPrefix(`/llm/`))
-      tls:
-        certResolver: changkunResolver
-      middlewares:
-        - llm-ui-redirect
-        - llm-headers
-        - llm-stripprefix
-      service: llm
-    to-llm-assets:
-      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&PathPrefix(`/litellm-asset-prefix/`)
+      rule: Host(`llm.changkun.de`)
       tls:
         certResolver: changkunResolver
       service: llm
@@ -223,19 +214,6 @@ http:
         regex: "^(.*)blog.changkun.de/(.*)"
         replacement: "https://changkun.de/blog/${2}"
         permanent: true
-    llm-stripprefix:
-      stripPrefix:
-        prefixes:
-          - /llm
-    llm-headers:
-      headers:
-        customRequestHeaders:
-          X-Forwarded-Prefix: /llm
-    llm-ui-redirect:
-      redirectRegex:
-        regex: "^(.*)/llm/ui$"
-        replacement: "${1}/llm/ui/"
-        permanent: false
     main-errorpages:
       errors:
         status:

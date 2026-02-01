@@ -20,6 +20,12 @@ model_list:
       model: gemini/*
       api_key: os.environ/GEMINI_API_KEY
 
+  # OpenRouter - wildcard routes all openrouter/* models
+  - model_name: openrouter/*
+    litellm_params:
+      model: openrouter/*
+      api_key: os.environ/OPENROUTER_API_KEY
+
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
   proxy_base_url: https://llm.changkun.de

@@ -13,7 +13,7 @@ services:
       - ./config.yaml:/app/config.yaml
     env_file:
       - .env
-    command: ["--config", "/app/config.yaml", "--port", "4000"]
+    command: ["--config", "/app/config.yaml", "--port", "4000", "--root_path", "/llm"]
     networks:
       - traefik_proxy
 

@@ -7,20 +7,40 @@ services:
     container_name: llm
     image: ghcr.io/berriai/litellm:main-latest
     restart: always
+    depends_on:
+      - llm-db
     ports:
       - "4000:4000"
     volumes:
       - ./config.yaml:/app/config.yaml
-      - ./data:/app/data
     env_file:
       - .env
     command: ["--config", "/app/config.yaml", "--port", "4000"]
     environment:
       - PROXY_BASE_URL=https://llm.changkun.de
-      - DATABASE_URL=sqlite:///app/data/litellm.db
+      - DATABASE_URL=postgresql://litellm:litellm@llm-db:5432/litellm
     networks:
       - traefik_proxy
+      - llm-internal
+
+  llm-db:
+    container_name: llm-db
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=litellm
+      - POSTGRES_PASSWORD=litellm
+      - POSTGRES_DB=litellm
+    volumes:
+      - llm-db-data:/var/lib/postgresql/data
+    networks:
+      - llm-internal
 
 networks:
   traefik_proxy:
     external: true
+  llm-internal:
+    driver: bridge
+
+volumes:
+  llm-db-data:

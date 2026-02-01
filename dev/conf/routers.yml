@@ -30,7 +30,7 @@ http:
       service: blog
     # github.com/changkun/redir
     to-redir:
-      rule: "Host(`localhost`)&&(Path(`/{redir:[srx]}`)||PathPrefix(`/{redir:[srx]}/`))"
+      rule: "Host(`localhost`)&&PathRegexp(`^/[srx](/.*)?$`)"
       middlewares:
         - main-errorpages
       service: redir

@@ -13,6 +13,7 @@ http:
     # github.com/changkun/main
     to-main:
       rule: Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`)
+      priority: 1
       tls:
         certResolver: changkunResolver
       middlewares:

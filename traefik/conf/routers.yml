@@ -300,4 +300,4 @@ http:
     llm:
       loadBalancer:
         servers:
-        - url: http://llm
+        - url: http://llm:4000

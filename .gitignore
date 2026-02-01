@@ -16,3 +16,4 @@
 logs/
 acme.json
 acme-*.json
+.env

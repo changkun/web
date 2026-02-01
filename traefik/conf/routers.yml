@@ -77,7 +77,7 @@ http:
       service: urlstat
     # github.com/changkun/redir
     to-redir:
-      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/{redir:[srx]}`)||PathPrefix(`/{redir:[srx]}/`))
+      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&PathRegexp(`^/[srx](/.*)?$`)
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -144,7 +144,7 @@ http:
         - golang-errorpages
     # github.com/golang-design/redir
     to-golangdesign-redir:
-      rule: (Host(`golang.design`) || Host(`www.golang.design`)) && (Path(`/{golangdesign-redir:[sx]}`)||PathPrefix(`/{golangdesign-redir:[sx]}/`))
+      rule: (Host(`golang.design`) || Host(`www.golang.design`)) && PathRegexp(`^/[sx](/.*)?$`)
       service: golangdesign-redir
       tls:
         certResolver: golangdesignResolver
@@ -155,7 +155,7 @@ http:
     # github.com/golang-design/under-the-hood
     # github.com/golang-design/go-questions
     to-golangdesign:
-      rule: (Host(`golang.design`) || Host(`www.golang.design`)) && (Path(`/`)||Path(`/index.html`)||Path(`/404.html`)||Path(`/sponsors.html`)||Path(`/icons/talkgo.png`)||Path(`/static/{name:(.*)}.js`)||Path(`/static/{name:(.*)}.css`)||Path(`/favicon.svg`)||Path(`/favicon.ico`)||Path(`/favicon.png`)||PathPrefix(`/history`)||PathPrefix(`/under-the-hood`)||PathPrefix(`/research`)||PathPrefix(`/miner`)||PathPrefix(`/go-questions`))
+      rule: (Host(`golang.design`) || Host(`www.golang.design`)) && (Path(`/`)||Path(`/index.html`)||Path(`/404.html`)||Path(`/sponsors.html`)||Path(`/icons/talkgo.png`)||PathRegexp(`^/static/.+\\.js$`)||PathRegexp(`^/static/.+\\.css$`)||Path(`/favicon.svg`)||Path(`/favicon.ico`)||Path(`/favicon.png`)||PathPrefix(`/history`)||PathPrefix(`/under-the-hood`)||PathPrefix(`/research`)||PathPrefix(`/miner`)||PathPrefix(`/go-questions`))
       tls:
         certResolver: golangdesignResolver
       middlewares:

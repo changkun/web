@@ -14,22 +14,10 @@ model_list:
       model: anthropic/*
       api_key: os.environ/ANTHROPIC_API_KEY
 
-  # Google AI Studio (Gemini)
-  - model_name: gemini/gemini-2.0-flash
+  # Google AI Studio (Gemini) - wildcard routes all gemini/* models
+  - model_name: gemini/*
     litellm_params:
-      model: gemini/gemini-2.0-flash
-      api_key: os.environ/GEMINI_API_KEY
-  - model_name: gemini/gemini-2.0-flash-lite
-    litellm_params:
-      model: gemini/gemini-2.0-flash-lite
-      api_key: os.environ/GEMINI_API_KEY
-  - model_name: gemini/gemini-1.5-pro
-    litellm_params:
-      model: gemini/gemini-1.5-pro
-      api_key: os.environ/GEMINI_API_KEY
-  - model_name: gemini/gemini-1.5-flash
-    litellm_params:
-      model: gemini/gemini-1.5-flash
+      model: gemini/*
       api_key: os.environ/GEMINI_API_KEY
 
 general_settings:

@@ -2,15 +2,23 @@
 # https://docs.litellm.ai/docs/proxy/configs
 
 model_list:
-  - model_name: gpt-4
+  # OpenAI - wildcard routes all openai/* models
+  - model_name: openai/*
     litellm_params:
-      model: openai/gpt-4
+      model: openai/*
       api_key: os.environ/OPENAI_API_KEY
 
-  - model_name: claude-3-opus
+  # Anthropic - wildcard routes all anthropic/* models
+  - model_name: anthropic/*
     litellm_params:
-      model: anthropic/claude-3-opus-20240229
+      model: anthropic/*
       api_key: os.environ/ANTHROPIC_API_KEY
+
+  # Google Gemini - wildcard routes all gemini/* models
+  - model_name: gemini/*
+    litellm_params:
+      model: gemini/*
+      api_key: os.environ/GEMINI_API_KEY
 
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY

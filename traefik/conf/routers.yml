@@ -155,7 +155,8 @@ http:
     # github.com/golang-design/under-the-hood
     # github.com/golang-design/go-questions
     to-golangdesign:
-      rule: (Host(`golang.design`) || Host(`www.golang.design`)) && (Path(`/`)||Path(`/index.html`)||Path(`/404.html`)||Path(`/sponsors.html`)||Path(`/icons/talkgo.png`)||PathPrefix(`/static/`)||Path(`/favicon.svg`)||Path(`/favicon.ico`)||Path(`/favicon.png`)||PathPrefix(`/history`)||PathPrefix(`/under-the-hood`)||PathPrefix(`/research`)||PathPrefix(`/miner`)||PathPrefix(`/go-questions`))
+      rule: Host(`golang.design`) || Host(`www.golang.design`)
+      priority: 1
       tls:
         certResolver: golangdesignResolver
       middlewares:

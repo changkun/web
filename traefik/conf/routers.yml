@@ -12,7 +12,7 @@ http:
       service: login
     # github.com/changkun/main
     to-main:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)
+      rule: Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`)
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -21,7 +21,7 @@ http:
       service: main
     # github.com/changkun/research
     to-research:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/research`)||PathPrefix(`/research/`))
+      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/research`)||PathPrefix(`/research/`))
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -29,7 +29,7 @@ http:
       service: research
     # research relevant redirectors
     to-talks:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/talks`)||PathPrefix(`/talks/`)||Path(`/talk`)||PathPrefix(`/talk/`)||PathPrefix(`/teach`)||PathPrefix(`/teach/`)||PathPrefix(`/thesis`)||PathPrefix(`/thesis/`)||PathPrefix(`/theses`)||PathPrefix(`/theses/`)||PathPrefix(`/papers`)||PathPrefix(`/papers/`)||PathPrefix(`/paper`)||PathPrefix(`/paper/`))
+      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/talks`)||PathPrefix(`/talks/`)||Path(`/talk`)||PathPrefix(`/talk/`)||PathPrefix(`/teach`)||PathPrefix(`/teach/`)||PathPrefix(`/thesis`)||PathPrefix(`/thesis/`)||PathPrefix(`/theses`)||PathPrefix(`/theses/`)||PathPrefix(`/papers`)||PathPrefix(`/papers/`)||PathPrefix(`/paper`)||PathPrefix(`/paper/`))
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -44,7 +44,7 @@ http:
     # github.com/changkun/modern-cpp-tutorial
     # github.com/changkun/blog
     to-static-changkun:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/blog`)||PathPrefix(`/consent`)||PathPrefix(`/bibtidy`)||PathPrefix(`/demos/`))
+      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/blog`)||PathPrefix(`/consent`)||PathPrefix(`/bibtidy`)||PathPrefix(`/demos/`))
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -60,7 +60,7 @@ http:
         - blog-redirector
       service: static-changkun
     to-us:
-      rule: Host(`changkun.us`, `www.changkun.us`, `ou.changkun.us`)
+      rule: Host(`changkun.us`) || Host(`www.changkun.us`) || Host(`ou.changkun.us`)
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -68,7 +68,7 @@ http:
       service: static-changkun
     # github.com/changkun/urlstat
     to-urlstat:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&PathPrefix(`/urlstat`)
+      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&PathPrefix(`/urlstat`)
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -76,7 +76,7 @@ http:
       service: urlstat
     # github.com/changkun/redir
     to-redir:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/{redir:[srx]}`)||PathPrefix(`/{redir:[srx]}/`))
+      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/{redir:[srx]}`)||PathPrefix(`/{redir:[srx]}/`))
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -85,14 +85,14 @@ http:
 
     # github.com/changkun/void
     to-void:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&(Path(`/void`)||PathPrefix(`/void/`))
+      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/void`)||PathPrefix(`/void/`))
       service: void
       tls:
         certResolver: changkunResolver
 
     # github.com/changkun/midgard
     to-midgard:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&PathPrefix(`/midgard`)
+      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&PathPrefix(`/midgard`)
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -100,7 +100,7 @@ http:
       service: midgard
     # github.com/changkun/upbot
     to-upbot:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&PathPrefix(`/upbot`)
+      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&PathPrefix(`/upbot`)
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -108,7 +108,7 @@ http:
       service: upbot
     # github.com/changkun/go-under-the-hood
     to-golang:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`)&&PathPrefix(`/golang`)
+      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&PathPrefix(`/golang`)
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -116,13 +116,18 @@ http:
       service: main
     # github.com/golang-design/ssaplayground
     to-gossa:
-      rule: Host(`changkun.de`, `ou.changkun.de`, `www.changkun.de`, `golang.design`, `www.golang.design`)&&(Path(`/gossa`)||PathPrefix(`/gossa/`))
+      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`) || Host(`golang.design`) || Host(`www.golang.design`))&&(Path(`/gossa`)||PathPrefix(`/gossa/`))
       tls:
         certResolver: changkunResolver
       service: gossa
+    to-llm:
+      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/llm`)||PathPrefix(`/llm/`))
+      tls:
+        certResolver: changkunResolver
+      service: llm
     # github.com/polyred/website
     to-polyred:
-      rule: Host(`poly.red`, `polyred.org`, `polyred.de`, `poly.graphics`, `polyred.graphics`)
+      rule: Host(`poly.red`) || Host(`polyred.org`) || Host(`polyred.de`) || Host(`poly.graphics`) || Host(`polyred.graphics`)
       tls:
         certResolver: polyredResolver
       middlewares:
@@ -130,7 +135,7 @@ http:
       service: polyred
     # github.com/golang-design/code2img
     to-code2img:
-      rule: Host(`golang.design`, `www.golang.design`) && PathPrefix(`/api/v1/code2img`)
+      rule: (Host(`golang.design`) || Host(`www.golang.design`)) && PathPrefix(`/api/v1/code2img`)
       service: code2img
       tls:
         certResolver: golangdesignResolver
@@ -138,7 +143,7 @@ http:
         - golang-errorpages
     # github.com/golang-design/redir
     to-golangdesign-redir:
-      rule: Host(`golang.design`, `www.golang.design`) && (Path(`/{golangdesign-redir:[sx]}`)||PathPrefix(`/{golangdesign-redir:[sx]}/`))
+      rule: (Host(`golang.design`) || Host(`www.golang.design`)) && (Path(`/{golangdesign-redir:[sx]}`)||PathPrefix(`/{golangdesign-redir:[sx]}/`))
       service: golangdesign-redir
       tls:
         certResolver: golangdesignResolver
@@ -149,7 +154,7 @@ http:
     # github.com/golang-design/under-the-hood
     # github.com/golang-design/go-questions
     to-golangdesign:
-      rule: Host(`golang.design`, `www.golang.design`) && (Path(`/`)||Path(`/index.html`)||Path(`/404.html`)||Path(`/sponsors.html`)||Path(`/icons/talkgo.png`)||Path(`/static/{name:(.*)}.js`)||Path(`/static/{name:(.*)}.css`)||Path(`/favicon.svg`)||Path(`/favicon.ico`)||Path(`/favicon.png`)||PathPrefix(`/history`)||PathPrefix(`/under-the-hood`)||PathPrefix(`/research`)||PathPrefix(`/miner`)||PathPrefix(`/go-questions`))
+      rule: (Host(`golang.design`) || Host(`www.golang.design`)) && (Path(`/`)||Path(`/index.html`)||Path(`/404.html`)||Path(`/sponsors.html`)||Path(`/icons/talkgo.png`)||Path(`/static/{name:(.*)}.js`)||Path(`/static/{name:(.*)}.css`)||Path(`/favicon.svg`)||Path(`/favicon.ico`)||Path(`/favicon.png`)||PathPrefix(`/history`)||PathPrefix(`/under-the-hood`)||PathPrefix(`/research`)||PathPrefix(`/miner`)||PathPrefix(`/go-questions`))
       tls:
         certResolver: golangdesignResolver
       middlewares:
@@ -284,3 +289,7 @@ http:
       loadBalancer:
         servers:
         - url: http://void
+    llm:
+      loadBalancer:
+        servers:
+        - url: http://llm

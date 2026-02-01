@@ -141,3 +141,7 @@ http:
       loadBalancer:
         servers:
         - url: http://research
+    llm:
+      loadBalancer:
+        servers:
+        - url: http://llm

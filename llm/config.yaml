@@ -14,6 +14,7 @@ model_list:
 
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
+  proxy_base_url: https://changkun.de/llm
 
 litellm_settings:
   drop_params: true

@@ -125,6 +125,8 @@ http:
       rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/llm`)||PathPrefix(`/llm/`))
       tls:
         certResolver: changkunResolver
+      middlewares:
+        - llm-stripprefix
       service: llm
     # github.com/polyred/website
     to-polyred:
@@ -214,6 +216,10 @@ http:
         regex: "^(.*)blog.changkun.de/(.*)"
         replacement: "https://changkun.de/blog/${2}"
         permanent: true
+    llm-stripprefix:
+      stripPrefix:
+        prefixes:
+          - /llm
     main-errorpages:
       errors:
         status:

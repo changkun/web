@@ -1,0 +1,22 @@
+# Copyright 2024 Changkun Ou. All rights reserved.
+# Use of this source code is governed by a GPL-3.0
+# license that can be found in the LICENSE file.
+
+services:
+  llm:
+    container_name: llm
+    image: ghcr.io/berriai/litellm:main-latest
+    restart: always
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./config.yaml:/app/config.yaml
+    env_file:
+      - .env
+    command: ["--config", "/app/config.yaml", "--port", "4000"]
+    networks:
+      - traefik_proxy
+
+networks:
+  traefik_proxy:
+    external: true

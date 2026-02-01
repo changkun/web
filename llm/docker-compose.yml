@@ -19,6 +19,7 @@ services:
     environment:
       - PROXY_BASE_URL=https://llm.changkun.de
       - DATABASE_URL=postgresql://litellm:litellm@llm-db:5432/litellm
+      - OR_API_KEY=${OR_API_KEY}
     networks:
       - traefik_proxy
       - llm-internal

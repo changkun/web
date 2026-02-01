@@ -126,6 +126,11 @@ http:
       tls:
         certResolver: changkunResolver
       service: llm
+    to-langfuse:
+      rule: Host(`langfuse.changkun.de`)
+      tls:
+        certResolver: changkunResolver
+      service: langfuse
     # github.com/polyred/website
     to-polyred:
       rule: Host(`poly.red`) || Host(`polyred.org`) || Host(`polyred.de`) || Host(`poly.graphics`) || Host(`polyred.graphics`)
@@ -295,3 +300,7 @@ http:
       loadBalancer:
         servers:
         - url: http://llm:4000
+    langfuse:
+      loadBalancer:
+        servers:
+        - url: http://langfuse:3000

@@ -8,7 +8,7 @@ services:
     image: ghcr.io/berriai/litellm:main-latest
     restart: always
     depends_on:
-      - llm-db
+      - postgres
     ports:
       - "4000:4000"
     volumes:
@@ -18,23 +18,44 @@ services:
     command: ["--config", "/app/config.yaml", "--port", "4000"]
     environment:
       - PROXY_BASE_URL=https://llm.changkun.de
-      - DATABASE_URL=postgresql://litellm:litellm@llm-db:5432/litellm
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/litellm
       - OR_API_KEY=${OR_API_KEY}
+      - LANGFUSE_PUBLIC_KEY=${LANGFUSE_PUBLIC_KEY}
+      - LANGFUSE_SECRET_KEY=${LANGFUSE_SECRET_KEY}
+      - LANGFUSE_HOST=http://langfuse:3000
     networks:
       - traefik_proxy
       - llm-internal
 
-  llm-db:
-    container_name: llm-db
+  postgres:
+    container_name: llm-postgres
     image: postgres:16-alpine
     restart: always
     environment:
-      - POSTGRES_USER=litellm
-      - POSTGRES_PASSWORD=litellm
-      - POSTGRES_DB=litellm
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     volumes:
-      - llm-db-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     networks:
+      - llm-internal
+
+  langfuse:
+    container_name: langfuse
+    image: langfuse/langfuse:latest
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - "3100:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/langfuse
+      - NEXTAUTH_SECRET=${LANGFUSE_NEXTAUTH_SECRET}
+      - SALT=${LANGFUSE_SALT}
+      - NEXTAUTH_URL=https://langfuse.changkun.de
+      - TELEMETRY_ENABLED=false
+    networks:
+      - traefik_proxy
       - llm-internal
 
 networks:
@@ -44,4 +65,4 @@ networks:
     driver: bridge
 
 volumes:
-  llm-db-data:
+  postgres-data:

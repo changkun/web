@@ -7,6 +7,6 @@ init:
 	touch logs/traefik.log
 	touch logs/access.log
 up:
-	docker-compose up -d
+	docker compose up -d
 down:
-	docker-compose down
+	docker compose down

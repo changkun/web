@@ -20,9 +20,6 @@ services:
       - PROXY_BASE_URL=https://llm.changkun.de
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/litellm
       - OR_API_KEY=${OR_API_KEY}
-      - LANGFUSE_PUBLIC_KEY=${LANGFUSE_PUBLIC_KEY}
-      - LANGFUSE_SECRET_KEY=${LANGFUSE_SECRET_KEY}
-      - LANGFUSE_HOST=http://langfuse:3000
     networks:
       - traefik_proxy
       - llm-internal
@@ -34,28 +31,10 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=litellm
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     networks:
-      - llm-internal
-
-  langfuse:
-    container_name: langfuse
-    image: langfuse/langfuse:latest
-    restart: always
-    depends_on:
-      - postgres
-    ports:
-      - "3100:3000"
-    environment:
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/langfuse
-      - NEXTAUTH_SECRET=${LANGFUSE_NEXTAUTH_SECRET}
-      - SALT=${LANGFUSE_SALT}
-      - NEXTAUTH_URL=https://langfuse.changkun.de
-      - TELEMETRY_ENABLED=false
-    networks:
-      - traefik_proxy
       - llm-internal
 
 networks:

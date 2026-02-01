@@ -34,6 +34,8 @@ general_settings:
 
 litellm_settings:
   drop_params: true
+  success_callback: ["langfuse"]
+  failure_callback: ["langfuse"]
 
 # UI settings
 ui_settings:

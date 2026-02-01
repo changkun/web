@@ -4,8 +4,8 @@
 all: build
 build:
 	CGO_ENABLED=0 GOOS=linux go build
-	docker build -t static:latest .
+	docker buildx build -t static:latest --load .
 up:
-	docker-compose up -d
+	docker compose up -d
 down:
-	docker-compose down
+	docker compose down

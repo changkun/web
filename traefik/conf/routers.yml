@@ -67,6 +67,18 @@ http:
       middlewares:
         - us-redirector
       service: static-changkun
+    # api.changkun.de
+    to-api:
+      rule: Host(`api.changkun.de`)
+      priority: 1
+      tls:
+        certResolver: changkunResolver
+      service: main
+    to-api-ideas:
+      rule: Host(`api.changkun.de`)&&PathPrefix(`/ideas`)
+      tls:
+        certResolver: changkunResolver
+      service: ideas
     # github.com/changkun/urlstat
     to-urlstat:
       rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&PathPrefix(`/urlstat`)
@@ -263,6 +275,10 @@ http:
       loadBalancer:
         servers:
         - url: http://golangdesign-redir
+    ideas:
+      loadBalancer:
+        servers:
+        - url: http://ideas
     urlstat:
       loadBalancer:
         servers:

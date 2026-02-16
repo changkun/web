@@ -42,6 +42,14 @@ http:
         - papers-redirector
         - paper-redirector
       service: static-changkun
+    # ideas redirector
+    to-ideas:
+      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/ideas`)||PathPrefix(`/ideas/`))
+      tls:
+        certResolver: changkunResolver
+      middlewares:
+        - ideas-redirector
+      service: static-changkun
     # github.com/changkun/modern-cpp-tutorial
     # github.com/changkun/blog
     to-static-changkun:
@@ -225,6 +233,11 @@ http:
       redirectRegex:
         regex: "^(.*)blog.changkun.de/(.*)"
         replacement: "https://changkun.de/blog/${2}"
+        permanent: true
+    ideas-redirector:
+      redirectRegex:
+        regex: "^(.*)changkun.de/ideas(.*)"
+        replacement: "https://changkun.de/blog/ideas${2}"
         permanent: true
     main-errorpages:
       errors:

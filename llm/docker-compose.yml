@@ -20,6 +20,11 @@ services:
       - PROXY_BASE_URL=https://llm.changkun.de
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/litellm
       - OR_API_KEY=${OR_API_KEY}
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - traefik_proxy
       - llm-internal
@@ -34,6 +39,11 @@ services:
       - POSTGRES_DB=litellm
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - llm-internal
 

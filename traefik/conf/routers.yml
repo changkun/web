@@ -148,7 +148,7 @@ http:
       service: llm
     # github.com/polyred/website
     to-polyred:
-      rule: Host(`poly.red`) || Host(`polyred.org`) || Host(`polyred.de`) || Host(`poly.graphics`) || Host(`polyred.graphics`)
+      rule: Host(`poly.red`)
       tls:
         certResolver: polyredResolver
       middlewares:

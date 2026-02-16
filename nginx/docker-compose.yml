@@ -10,6 +10,11 @@ services:
       - /www:/usr/share/nginx/html
     deploy:
       replicas: 1
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - traefik_proxy
   www-golang:
@@ -19,6 +24,11 @@ services:
       - /www/golang.design:/usr/share/nginx/html
     deploy:
       replicas: 1
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - traefik_proxy
 

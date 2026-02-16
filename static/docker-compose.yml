@@ -13,6 +13,11 @@ services:
     environment:
       STATIC_ADDR: :80
       STATIC_FOLDER: /www/changkun.de
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - traefik_proxy
   www-golangdesign:
@@ -25,6 +30,11 @@ services:
     environment:
       STATIC_ADDR: :80
       STATIC_FOLDER: /www/golang.design
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - traefik_proxy
 

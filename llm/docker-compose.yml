@@ -5,7 +5,7 @@
 services:
   llm:
     container_name: llm
-    image: ghcr.io/berriai/litellm:main-latest
+    image: ghcr.io/berriai/litellm:v1.81.12.rc.1
     restart: always
     depends_on:
       - postgres

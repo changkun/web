@@ -141,11 +141,6 @@ http:
       tls:
         certResolver: changkunResolver
       service: gossa
-    to-llm:
-      rule: Host(`llm.changkun.de`)
-      tls:
-        certResolver: changkunResolver
-      service: llm
     # github.com/polyred/website
     to-polyred:
       rule: Host(`poly.red`)
@@ -320,7 +315,3 @@ http:
       loadBalancer:
         servers:
         - url: http://void
-    llm:
-      loadBalancer:
-        servers:
-        - url: http://llm:4000

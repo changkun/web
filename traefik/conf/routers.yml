@@ -52,8 +52,9 @@ http:
       service: static-changkun
     # github.com/changkun/modern-cpp-tutorial
     # github.com/changkun/blog
+    # github.com/changkun/unverifiable-world
     to-static-changkun:
-      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/blog`)||PathPrefix(`/consent`)||PathPrefix(`/bibtidy`)||PathPrefix(`/demos/`))
+      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/blog`)||PathPrefix(`/consent`)||PathPrefix(`/bibtidy`)||PathPrefix(`/demos/`)||Path(`/unverifiable-world`)||PathPrefix(`/unverifiable-world/`))
       tls:
         certResolver: changkunResolver
       middlewares:

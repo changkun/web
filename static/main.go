@@ -3,6 +3,8 @@
 package main
 
 import (
+	"fmt"
+	"html"
 	"log"
 	"net"
 	"net/http"
@@ -19,26 +21,58 @@ func main() {
 	if addr == "" {
 		log.Fatalf("missing address.")
 	}
-	folder := os.Getenv("STATIC_FOLDER")
-	if !strings.HasPrefix(folder, "/www") {
-		log.Fatal("failed to serve folder outside /www folder.")
-	}
 
-	http.Handle("/", l(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Allow CORS for all /demos requests
-		if strings.Contains(r.URL.Path, "/demos") {
-			w.Header().Set("Access-Control-Allow-Headers", "*")
-			w.Header().Set("Access-Control-Allow-Origin", "*")
-			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	vanityImport := os.Getenv("STATIC_VANITY_IMPORT")
+	if vanityImport != "" {
+		http.Handle("/", l(vanityHandler(
+			vanityImport,
+			os.Getenv("STATIC_VANITY_SOURCE"),
+			os.Getenv("STATIC_VANITY_REDIRECT"),
+		)))
+	} else {
+		folder := os.Getenv("STATIC_FOLDER")
+		if !strings.HasPrefix(folder, "/www") {
+			log.Fatal("failed to serve folder outside /www folder.")
 		}
 
-		http.FileServer(http.Dir(folder)).ServeHTTP(w, r)
-	})))
+		http.Handle("/", l(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			// Allow CORS for all /demos requests
+			if strings.Contains(r.URL.Path, "/demos") {
+				w.Header().Set("Access-Control-Allow-Headers", "*")
+				w.Header().Set("Access-Control-Allow-Origin", "*")
+				w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+			}
+
+			http.FileServer(http.Dir(folder)).ServeHTTP(w, r)
+		})))
+	}
+
 	log.Println("Listening on http://static:80...")
 	err := http.ListenAndServe(addr, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func vanityHandler(importMeta, sourceMeta, redirectURL string) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Query().Get("go-get") == "1" {
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			fmt.Fprintf(w, "<!doctype html>\n<html><head>\n")
+			fmt.Fprintf(w, "<meta name=\"go-import\" content=\"%s\">\n", html.EscapeString(importMeta))
+			if sourceMeta != "" {
+				fmt.Fprintf(w, "<meta name=\"go-source\" content=\"%s\">\n", html.EscapeString(sourceMeta))
+			}
+			fmt.Fprintf(w, "</head><body></body></html>\n")
+			return
+		}
+
+		if redirectURL != "" {
+			http.Redirect(w, r, redirectURL, http.StatusMovedPermanently)
+			return
+		}
+		http.NotFound(w, r)
+	})
 }
 
 // logging wraps an http handler and returns a new handler that prints

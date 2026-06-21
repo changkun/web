@@ -142,6 +142,14 @@ http:
       tls:
         certResolver: changkunResolver
       service: gossa
+    # github.com/changkun/polyred vanity import
+    to-polyred-vanity:
+      rule: Host(`poly.red`)
+      tls:
+        certResolver: changkunResolver
+      middlewares:
+        - gzipcompress
+      service: polyred-vanity
     # github.com/golang-design/code2img
     to-code2img:
       rule: (Host(`golang.design`) || Host(`www.golang.design`)) && PathPrefix(`/api/v1/code2img`)
@@ -300,6 +308,10 @@ http:
       loadBalancer:
         servers:
         - url: http://code2img
+    polyred-vanity:
+      loadBalancer:
+        servers:
+        - url: http://polyred-vanity
     void:
       loadBalancer:
         servers:

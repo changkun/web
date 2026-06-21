@@ -24,6 +24,7 @@ golang.design/{s,x}            # github.com/golang-design/redir
 golang.design/research         # github.com/golang-design/research
 golang.design/under-the-hood   # github.com/golang-design/under-the-hood
 golang.design/go-questions     # github.com/golang-design/go-questions
+poly.red                       # github.com/changkun/polyred (Go vanity import)
 ```
 
 ## License

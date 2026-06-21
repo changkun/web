@@ -19,3 +19,4 @@ acme-*.json
 .env
 llm/data/
 data/
+/static/static

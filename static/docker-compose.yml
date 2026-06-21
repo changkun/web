@@ -37,6 +37,23 @@ services:
         max-file: "3"
     networks:
       - traefik_proxy
+  polyred-vanity:
+    image: static:latest
+    restart: always
+    deploy:
+      replicas: 1
+    environment:
+      STATIC_ADDR: :80
+      STATIC_VANITY_IMPORT: poly.red git https://github.com/changkun/polyred
+      STATIC_VANITY_SOURCE: poly.red https://github.com/changkun/polyred https://github.com/changkun/polyred/tree/main{/dir} https://github.com/changkun/polyred/blob/main{/dir}/{file}#L{line}
+      STATIC_VANITY_REDIRECT: https://github.com/changkun/polyred
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - traefik_proxy
 
 networks:
   traefik_proxy:

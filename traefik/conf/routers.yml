@@ -142,14 +142,6 @@ http:
       tls:
         certResolver: changkunResolver
       service: gossa
-    # github.com/polyred/website
-    to-polyred:
-      rule: Host(`poly.red`)
-      tls:
-        certResolver: polyredResolver
-      middlewares:
-        - gzipcompress
-      service: polyred
     # github.com/golang-design/code2img
     to-code2img:
       rule: (Host(`golang.design`) || Host(`www.golang.design`)) && PathPrefix(`/api/v1/code2img`)
@@ -308,10 +300,6 @@ http:
       loadBalancer:
         servers:
         - url: http://code2img
-    polyred:
-      loadBalancer:
-        servers:
-        - url: http://polyred
     void:
       loadBalancer:
         servers:

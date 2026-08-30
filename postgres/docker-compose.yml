@@ -1,0 +1,42 @@
+# Copyright 2026 Changkun Ou. All rights reserved.
+# Use of this source code is governed by a GPL-3.0
+# license that can be found in the LICENSE file.
+
+# The PostgreSQL instance shared by the services on this host. It used to
+# be a service of the urlstat compose project, which made every other
+# consumer depend on that project's lifecycle and network. It lives here
+# instead, beside traefik, because this repository already owns the
+# infrastructure the services share.
+#
+# It deliberately publishes no host port and stays off traefik_proxy, so
+# it is reachable only by containers that join postgres_internal.
+
+services:
+  postgres:
+    container_name: postgres
+    restart: always
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: urlstat
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in postgres/.env}
+      POSTGRES_DB: urlstat
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U urlstat"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    mem_limit: 1g
+    memswap_limit: 2g
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge

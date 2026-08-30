@@ -20,3 +20,5 @@ acme-*.json
 llm/data/
 data/
 /static/static
+postgres/.env
+postgres/data

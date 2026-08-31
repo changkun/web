@@ -15,7 +15,6 @@ changkun.de/void               # github.com/changkun/void
 changkun.de/talks              # github.com/changkun/talks
 changkun.de/urlstat            # github.com/changkun/urlstat
 changkun.de/upbot              # github.com/changkun/upbot
-login.changkun.de              # github.com/changkun/login
 blog.changkun.de               # github.com/changkun/blog
 golang.design                  # github.com/golang-design/website
 golang.design/gossa            # github.com/golang-design/ssaplayground

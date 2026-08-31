@@ -4,12 +4,6 @@
 
 http:
   routers:
-    # github.com/changkun/login
-    to-login:
-      rule: Host(`login.changkun.de`)
-      tls:
-        certResolver: changkunResolver
-      service: login
     # github.com/changkun/main
     to-main:
       rule: Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`)
@@ -256,10 +250,6 @@ http:
     gzipcompress:
       compress: {}
   services:
-    login:
-      loadBalancer:
-        servers:
-        - url: http://login
     main:
       loadBalancer:
         servers:

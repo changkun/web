@@ -152,10 +152,12 @@ http:
         certResolver: golangdesignResolver
       middlewares:
         - golang-errorpages
-    # github.com/golang-design/redir
+    # Served by changkun/redir, which keys links and visits by hostname
+    # and so serves both sites from one process. The golang.design fork
+    # it replaced is retired; see specs/004-unify-golang-design.md there.
     to-golangdesign-redir:
       rule: (Host(`golang.design`) || Host(`www.golang.design`)) && PathRegexp(`^/[sx](/.*)?$`)
-      service: golangdesign-redir
+      service: redir
       tls:
         certResolver: golangdesignResolver
       middlewares:

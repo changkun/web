@@ -267,10 +267,6 @@ http:
       loadBalancer:
         servers:
         - url: http://redir
-    golangdesign-redir:
-      loadBalancer:
-        servers:
-        - url: http://golangdesign-redir
     urlstat:
       loadBalancer:
         servers:

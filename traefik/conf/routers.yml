@@ -15,13 +15,15 @@ http:
         - main-errorpages
       service: main
     # github.com/changkun/research
+    # A folder in /www/changkun.de, rendered by `make deploy` there. Its own
+    # router keeps the PDFs out of gzipcompress.
     to-research:
       rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/research`)||PathPrefix(`/research/`))
       tls:
         certResolver: changkunResolver
       middlewares:
         - main-errorpages
-      service: research
+      service: static-changkun
     # research relevant redirectors
     to-talks:
       rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/talks`)||PathPrefix(`/talks/`)||Path(`/talk`)||PathPrefix(`/talk/`)||PathPrefix(`/teach`)||PathPrefix(`/teach/`)||PathPrefix(`/thesis`)||PathPrefix(`/thesis/`)||PathPrefix(`/theses`)||PathPrefix(`/theses/`)||PathPrefix(`/papers`)||PathPrefix(`/papers/`)||PathPrefix(`/paper`)||PathPrefix(`/paper/`))
@@ -251,10 +253,6 @@ http:
       loadBalancer:
         servers:
         - url: http://main
-    research:
-      loadBalancer:
-        servers:
-        - url: http://research
     static-changkun:
       loadBalancer:
         servers:

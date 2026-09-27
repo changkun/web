@@ -13,6 +13,8 @@ services:
     environment:
       STATIC_ADDR: :80
       STATIC_FOLDER: /www/changkun.de
+      # The files of the research page, counted as its server counted them.
+      STATIC_URLSTAT: https://changkun.de/research/
     logging:
       driver: json-file
       options:

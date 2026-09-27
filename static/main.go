@@ -5,11 +5,14 @@ package main
 import (
 	"fmt"
 	"html"
+	"io"
 	"log"
 	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -35,7 +38,7 @@ func main() {
 			log.Fatal("failed to serve folder outside /www folder.")
 		}
 
-		http.Handle("/", l(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var h http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			// Allow CORS for all /demos requests
 			if strings.Contains(r.URL.Path, "/demos") {
 				w.Header().Set("Access-Control-Allow-Headers", "*")
@@ -44,7 +47,19 @@ func main() {
 			}
 
 			http.FileServer(http.Dir(folder)).ServeHTTP(w, r)
-		})))
+		})
+		// STATIC_URLSTAT names a folder whose files are counted, as the
+		// URL urlstat records them under, e.g. https://changkun.de/research/.
+		if counted := os.Getenv("STATIC_URLSTAT"); counted != "" {
+			u, err := url.Parse(counted)
+			if err != nil || u.Scheme == "" || u.Host == "" || !strings.HasSuffix(u.Path, "/") {
+				log.Fatalf("STATIC_URLSTAT must be the URL of a folder, got %q", counted)
+			}
+			h = countedHandler(u.Path, u.Scheme+"://"+u.Host, func(page, ua string) {
+				go reportUrlstat(page, ua)
+			}, h)
+		}
+		http.Handle("/", l(h))
 	}
 
 	log.Println("Listening on http://static:80...")
@@ -73,6 +88,48 @@ func vanityHandler(importMeta, sourceMeta, redirectURL string) http.Handler {
 		}
 		http.NotFound(w, r)
 	})
+}
+
+// countedHandler reports every request below prefix to urlstat, as the
+// page at origin+path, except the folder's own page, which a browser
+// reports through urlstat's client script. What it counts is what a
+// script cannot: the files a page links to, such as the PDFs of
+// changkun.de/research.
+func countedHandler(prefix, origin string, report func(page, ua string), next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		p := r.URL.Path
+		if strings.HasPrefix(p, prefix) && p != prefix && p != prefix+"index.html" {
+			report(origin+p, r.UserAgent())
+		}
+		next.ServeHTTP(w, r)
+	})
+}
+
+// urlstatEndpoint receives the reports, the way urlstat's client script
+// sends them from a browser.
+var (
+	urlstatEndpoint = "https://www.changkun.de/urlstat?report=page+site"
+	urlstatClient   = &http.Client{Timeout: 10 * time.Second}
+)
+
+func reportUrlstat(page, ua string) {
+	req, err := http.NewRequest(http.MethodGet, urlstatEndpoint, nil)
+	if err != nil {
+		log.Printf("urlstat: cannot report %s: %v", page, err)
+		return
+	}
+	req.Header.Set("urlstat-url", page)
+	req.Header.Set("urlstat-ua", ua)
+	resp, err := urlstatClient.Do(req)
+	if err != nil {
+		log.Printf("urlstat: cannot report %s: %v", page, err)
+		return
+	}
+	defer resp.Body.Close()
+	io.Copy(io.Discard, resp.Body)
+	if resp.StatusCode != http.StatusOK {
+		log.Printf("urlstat: cannot report %s: %s", page, resp.Status)
+	}
 }
 
 // logging wraps an http handler and returns a new handler that prints

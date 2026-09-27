@@ -60,3 +60,55 @@ func TestVanityHandlerRedirect(t *testing.T) {
 		t.Fatalf("Location = %q, want %q", got, "https://github.com/changkun/polyred")
 	}
 }
+
+func TestCountedHandler(t *testing.T) {
+	var reported []string
+	handler := countedHandler("/research/", "https://changkun.de", func(page, ua string) {
+		reported = append(reported, page+" "+ua)
+	}, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
+
+	for _, path := range []string{
+		"/research/",
+		"/research/index.html",
+		"/research/talks/phd.pdf",
+		"/research/papers/",
+		"/research",
+		"/blog/",
+	} {
+		req := httptest.NewRequest(http.MethodGet, "https://www.changkun.de"+path, nil)
+		req.Header.Set("User-Agent", "reader")
+		handler.ServeHTTP(httptest.NewRecorder(), req)
+	}
+
+	want := []string{
+		"https://changkun.de/research/talks/phd.pdf reader",
+		"https://changkun.de/research/papers/ reader",
+	}
+	if strings.Join(reported, "\n") != strings.Join(want, "\n") {
+		t.Fatalf("reported:\n%s\nwant:\n%s", strings.Join(reported, "\n"), strings.Join(want, "\n"))
+	}
+}
+
+func TestReportUrlstat(t *testing.T) {
+	got := make(chan *http.Request, 1)
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		got <- r
+	}))
+	defer srv.Close()
+	old := urlstatEndpoint
+	urlstatEndpoint = srv.URL + "/urlstat?report=page+site"
+	defer func() { urlstatEndpoint = old }()
+
+	reportUrlstat("https://changkun.de/research/talks/phd.pdf", "reader")
+
+	r := <-got
+	if r.URL.Query().Get("report") != "page site" {
+		t.Errorf("report = %q, want %q", r.URL.Query().Get("report"), "page site")
+	}
+	if h := r.Header.Get("urlstat-url"); h != "https://changkun.de/research/talks/phd.pdf" {
+		t.Errorf("urlstat-url = %q", h)
+	}
+	if h := r.Header.Get("urlstat-ua"); h != "reader" {
+		t.Errorf("urlstat-ua = %q", h)
+	}
+}

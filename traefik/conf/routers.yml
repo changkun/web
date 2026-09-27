@@ -96,13 +96,6 @@ http:
         - main-errorpages
       service: redir
 
-    # github.com/changkun/void
-    to-void:
-      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/void`)||PathPrefix(`/void/`))
-      service: void
-      tls:
-        certResolver: changkunResolver
-
     # github.com/changkun/midgard
     to-midgard:
       rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&PathPrefix(`/midgard`)
@@ -141,14 +134,6 @@ http:
       middlewares:
         - gzipcompress
       service: polyred-vanity
-    # github.com/golang-design/code2img
-    to-code2img:
-      rule: (Host(`golang.design`) || Host(`www.golang.design`)) && PathPrefix(`/api/v1/code2img`)
-      service: code2img
-      tls:
-        certResolver: golangdesignResolver
-      middlewares:
-        - golang-errorpages
     # Served by changkun/redir, which keys links and visits by hostname
     # and so serves both sites from one process. The golang.design fork
     # it replaced is retired; see specs/004-unify-golang-design.md there.
@@ -240,12 +225,6 @@ http:
           - "404"
         service: static-golang
         query: "/404.html"
-    blog-errorpages:
-      errors:
-        status:
-          - "404"
-        service: blog
-        query: "/404.html"
     gzipcompress:
       compress: {}
   services:
@@ -281,15 +260,7 @@ http:
       loadBalancer:
         servers:
         - url: http://gossa
-    code2img:
-      loadBalancer:
-        servers:
-        - url: http://code2img
     polyred-vanity:
       loadBalancer:
         servers:
         - url: http://polyred-vanity
-    void:
-      loadBalancer:
-        servers:
-        - url: http://void

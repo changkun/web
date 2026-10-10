@@ -135,6 +135,16 @@ http:
       middlewares:
         - gzipcompress
       service: polyred-vanity
+    # github.com/changkun/rankui-v2
+    # The study page for participants, under a domain that does not name
+    # its author. Its longer rule takes the path from the vanity import.
+    to-rankui-study:
+      rule: Host(`poly.red`)&&(Path(`/study`)||PathPrefix(`/study/`))
+      tls:
+        certResolver: changkunResolver
+      middlewares:
+        - gzipcompress
+      service: rankui-study
     # Served by changkun/redir, which keys links and visits by hostname
     # and so serves both sites from one process. The golang.design fork
     # it replaced is retired; see specs/004-unify-golang-design.md there.
@@ -265,3 +275,7 @@ http:
       loadBalancer:
         servers:
         - url: http://polyred-vanity
+    rankui-study:
+      loadBalancer:
+        servers:
+        - url: http://rankui-study:8080

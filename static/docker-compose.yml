@@ -3,25 +3,6 @@
 # license that can be found in the LICENSE file.
 
 services:
-  www-changkunde:
-    image: static:latest
-    restart: always
-    volumes:
-      - /www/changkun.de:/www/changkun.de
-    deploy:
-      replicas: 1
-    environment:
-      STATIC_ADDR: :80
-      STATIC_FOLDER: /www/changkun.de
-      # The files of the research page, counted as its server counted them.
-      STATIC_URLSTAT: https://changkun.de/research/
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-    networks:
-      - traefik_proxy
   www-golangdesign:
     image: static:latest
     restart: always

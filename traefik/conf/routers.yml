@@ -115,17 +115,18 @@ http:
       tls:
         certResolver: changkunResolver
       service: gossa
-    # github.com/changkun/polyred vanity import
-    to-polyred-vanity:
+    # poly.red, the import path of github.com/changkun/polyred, which
+    # changkun/redir answers for as one of its sites.
+    to-polyred:
       rule: Host(`poly.red`)
       tls:
         certResolver: changkunResolver
       middlewares:
         - gzipcompress
-      service: polyred-vanity
+      service: redir
     # github.com/changkun/rankui-v2
     # The study page for participants, under a domain that does not name
-    # its author. Its longer rule takes the path from the vanity import.
+    # its author. Its longer rule takes the path from the import path.
     to-rankui-study:
       rule: Host(`poly.red`)&&(Path(`/study`)||PathPrefix(`/study/`))
       tls:
@@ -276,10 +277,6 @@ http:
       loadBalancer:
         servers:
         - url: http://gossa
-    polyred-vanity:
-      loadBalancer:
-        servers:
-        - url: http://polyred-vanity
     rankui-study:
       loadBalancer:
         servers:

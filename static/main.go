@@ -3,8 +3,6 @@
 package main
 
 import (
-	"fmt"
-	"html"
 	"log"
 	"net"
 	"net/http"
@@ -22,48 +20,17 @@ func main() {
 		log.Fatalf("missing address.")
 	}
 
-	vanityImport := os.Getenv("STATIC_VANITY_IMPORT")
-	if vanityImport != "" {
-		http.Handle("/", l(vanityHandler(
-			vanityImport,
-			os.Getenv("STATIC_VANITY_SOURCE"),
-			os.Getenv("STATIC_VANITY_REDIRECT"),
-		)))
-	} else {
-		folder := os.Getenv("STATIC_FOLDER")
-		if !strings.HasPrefix(folder, "/www") {
-			log.Fatal("failed to serve folder outside /www folder.")
-		}
-
-		http.Handle("/", l(http.FileServer(http.Dir(folder))))
+	folder := os.Getenv("STATIC_FOLDER")
+	if !strings.HasPrefix(folder, "/www") {
+		log.Fatal("failed to serve folder outside /www folder.")
 	}
+	http.Handle("/", l(http.FileServer(http.Dir(folder))))
 
 	log.Println("Listening on http://static:80...")
 	err := http.ListenAndServe(addr, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func vanityHandler(importMeta, sourceMeta, redirectURL string) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Query().Get("go-get") == "1" {
-			w.Header().Set("Content-Type", "text/html; charset=utf-8")
-			fmt.Fprintf(w, "<!doctype html>\n<html><head>\n")
-			fmt.Fprintf(w, "<meta name=\"go-import\" content=\"%s\">\n", html.EscapeString(importMeta))
-			if sourceMeta != "" {
-				fmt.Fprintf(w, "<meta name=\"go-source\" content=\"%s\">\n", html.EscapeString(sourceMeta))
-			}
-			fmt.Fprintf(w, "</head><body></body></html>\n")
-			return
-		}
-
-		if redirectURL != "" {
-			http.Redirect(w, r, redirectURL, http.StatusMovedPermanently)
-			return
-		}
-		http.NotFound(w, r)
-	})
 }
 
 // logging wraps an http handler and returns a new handler that prints

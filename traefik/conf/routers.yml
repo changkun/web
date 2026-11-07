@@ -46,13 +46,23 @@ http:
       middlewares:
         - ideas-redirector
       service: static-changkun
+    # The rankui demo moved from /research/rankui to /rankui. The longer rule
+    # takes precedence over to-research.
+    to-research-rankui:
+      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/research/rankui`)||PathPrefix(`/research/rankui/`))
+      tls:
+        certResolver: changkunResolver
+      middlewares:
+        - rankui-redirector
+      service: static-changkun
     # github.com/changkun/modern-cpp-tutorial
     # github.com/changkun/blog
     # github.com/changkun/unverifiable-world
     # github.com/changkun/bobook
     # github.com/changkun/swedish-tutorial
+    # github.com/changkun/rankui
     to-static-changkun:
-      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/blog`)||PathPrefix(`/consent`)||PathPrefix(`/bibtidy`)||PathPrefix(`/demos/`)||Path(`/unverifiable-world`)||PathPrefix(`/unverifiable-world/`)||Path(`/bobook`)||PathPrefix(`/bobook/`)||Path(`/alignbook`)||PathPrefix(`/alignbook/`)||Path(`/swedish-tutorial`)||PathPrefix(`/swedish-tutorial/`))
+      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/blog`)||PathPrefix(`/consent`)||PathPrefix(`/bibtidy`)||PathPrefix(`/demos/`)||Path(`/unverifiable-world`)||PathPrefix(`/unverifiable-world/`)||Path(`/bobook`)||PathPrefix(`/bobook/`)||Path(`/alignbook`)||PathPrefix(`/alignbook/`)||Path(`/swedish-tutorial`)||PathPrefix(`/swedish-tutorial/`)||Path(`/rankui`)||PathPrefix(`/rankui/`))
       tls:
         certResolver: changkunResolver
       middlewares:
@@ -224,6 +234,11 @@ http:
       redirectRegex:
         regex: "^(.*)changkun.de/ideas(.*)"
         replacement: "https://changkun.de/blog/ideas${2}"
+        permanent: true
+    rankui-redirector:
+      redirectRegex:
+        regex: "^(.*)changkun.de/research/rankui(.*)"
+        replacement: "https://changkun.de/rankui${2}"
         permanent: true
     website-errorpages:
       errors:

@@ -4,7 +4,7 @@
 
 http:
   routers:
-    # github.com/changkun/main
+    # github.com/changkun/website
     to-main:
       rule: "Host(`localhost`)"
       middlewares:

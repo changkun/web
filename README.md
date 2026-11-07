@@ -7,7 +7,7 @@ Website services in changkun.de, golang.design, etc.
 This is an incomplete list of services that are running:
 
 ```bash
-changkun.de                    # github.com/changkun/main
+changkun.de                    # github.com/changkun/website
 changkun.de/{s,x}              # github.com/changkun/redir
 changkun.de/modern-cpp         # github.com/changkun/modern-cpp-tutorial
 changkun.de/midgard            # github.com/changkun/midgard

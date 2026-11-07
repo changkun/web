@@ -4,7 +4,9 @@
 
 http:
   routers:
-    # github.com/changkun/website
+    # github.com/changkun/website: the site, and each folder of
+    # /www/changkun.de at its own path, such as the books, the blog, and
+    # research.
     to-website:
       rule: Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`)
       priority: 1
@@ -14,16 +16,6 @@ http:
         - gzipcompress
         - website-errorpages
       service: website
-    # github.com/changkun/research
-    # A folder in /www/changkun.de, rendered by `make deploy` there. Its own
-    # router keeps the PDFs out of gzipcompress.
-    to-research:
-      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/research`)||PathPrefix(`/research/`))
-      tls:
-        certResolver: changkunResolver
-      middlewares:
-        - website-errorpages
-      service: static-changkun
     # research relevant redirectors
     to-talks:
       rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/talks`)||PathPrefix(`/talks/`)||Path(`/talk`)||PathPrefix(`/talk/`)||PathPrefix(`/teach`)||PathPrefix(`/teach/`)||PathPrefix(`/thesis`)||PathPrefix(`/thesis/`)||PathPrefix(`/theses`)||PathPrefix(`/theses/`)||PathPrefix(`/papers`)||PathPrefix(`/papers/`)||PathPrefix(`/paper`)||PathPrefix(`/paper/`))
@@ -37,7 +29,7 @@ http:
         - thesis-redirector
         - papers-redirector
         - paper-redirector
-      service: static-changkun
+      service: website
     # ideas redirector
     to-ideas:
       rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/ideas`)||PathPrefix(`/ideas/`))
@@ -45,30 +37,15 @@ http:
         certResolver: changkunResolver
       middlewares:
         - ideas-redirector
-      service: static-changkun
-    # The rankui demo moved from /research/rankui to /rankui. The longer rule
-    # takes precedence over to-research.
+      service: website
+    # The rankui demo moved from /research/rankui to /rankui.
     to-research-rankui:
       rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/research/rankui`)||PathPrefix(`/research/rankui/`))
       tls:
         certResolver: changkunResolver
       middlewares:
         - rankui-redirector
-      service: static-changkun
-    # github.com/changkun/modern-cpp-tutorial
-    # github.com/changkun/blog
-    # github.com/changkun/unverifiable-world
-    # github.com/changkun/bobook
-    # github.com/changkun/swedish-tutorial
-    # github.com/changkun/rankui
-    to-static-changkun:
-      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`)||PathPrefix(`/blog`)||PathPrefix(`/consent`)||PathPrefix(`/bibtidy`)||PathPrefix(`/demos/`)||Path(`/unverifiable-world`)||PathPrefix(`/unverifiable-world/`)||Path(`/bobook`)||PathPrefix(`/bobook/`)||Path(`/alignbook`)||PathPrefix(`/alignbook/`)||Path(`/swedish-tutorial`)||PathPrefix(`/swedish-tutorial/`)||Path(`/rankui`)||PathPrefix(`/rankui/`))
-      tls:
-        certResolver: changkunResolver
-      middlewares:
-        - gzipcompress
-        - website-errorpages
-      service: static-changkun
+      service: website
     # github.com/changkun/blog
     to-blog:
       rule: Host(`blog.changkun.de`)
@@ -76,14 +53,14 @@ http:
         certResolver: changkunResolver
       middlewares:
         - blog-redirector
-      service: static-changkun
+      service: website
     to-us:
       rule: Host(`changkun.us`) || Host(`www.changkun.us`) || Host(`ou.changkun.us`)
       tls:
         certResolver: changkunResolver
       middlewares:
         - us-redirector
-      service: static-changkun
+      service: website
     # api.changkun.de
     to-api:
       rule: Host(`api.changkun.de`)
@@ -252,17 +229,29 @@ http:
           - "404"
         service: static-golang
         query: "/404.html"
+    # Text only: PDFs, images, and audio are compressed already, and
+    # compressing them on the fly would also lose range requests.
     gzipcompress:
-      compress: {}
+      compress:
+        includedContentTypes:
+          - text/html
+          - text/css
+          - text/plain
+          - text/csv
+          - text/xml
+          - text/javascript
+          - application/javascript
+          - application/json
+          - application/xml
+          - application/rss+xml
+          - application/atom+xml
+          - application/wasm
+          - image/svg+xml
   services:
     website:
       loadBalancer:
         servers:
         - url: http://website
-    static-changkun:
-      loadBalancer:
-        servers:
-        - url: http://www-changkunde
     static-golang:
       loadBalancer:
         servers:

@@ -4,30 +4,13 @@
 
 http:
   routers:
-    # github.com/changkun/website
+    # github.com/changkun/website: the site, and each folder of
+    # /www/changkun.de at its own path, such as research and the blog.
     to-website:
       rule: "Host(`localhost`)"
       middlewares:
         - website-errorpages
       service: website
-    # github.com/changkun/research
-    to-research:
-      rule: Host(`localhost`)&&(Path(`/research`)||PathPrefix(`/research/`))
-      middlewares:
-        - website-errorpages
-      service: research
-    # github.com/changkun/modern-cpp-tutorial
-    to-modern-cpp:
-      rule: "Host(`localhost`)&&(Path(`/modern-cpp`)||PathPrefix(`/modern-cpp/`))"
-      middlewares:
-        - website-errorpages
-      service: modern-cpp
-    # github.com/changkun/blog
-    to-blog:
-      rule: "Host(`blog.localhost`)"
-      middlewares:
-        - blog-errorpages
-      service: blog
     # github.com/changkun/redir
     to-redir:
       rule: "Host(`localhost`)&&PathRegexp(`^/[srx](/.*)?$`)"
@@ -90,12 +73,6 @@ http:
           - "404"
         service: website
         query: "/404.html"
-    blog-errorpages:
-      errors:
-        status:
-          - "404"
-        service: blog
-        query: "/404.html"
     auth:
       basicAuth:
         users:
@@ -105,18 +82,6 @@ http:
       loadBalancer:
         servers:
         - url: http://website
-    talks:
-      loadBalancer:
-        servers:
-        - url: http://talks
-    modern-cpp:
-      loadBalancer:
-        servers:
-        - url: http://www
-    blog:
-      loadBalancer:
-        servers:
-        - url: http://blog
     redir:
       loadBalancer:
         servers:
@@ -137,11 +102,3 @@ http:
       loadBalancer:
         servers:
         - url: http://gossa
-    research:
-      loadBalancer:
-        servers:
-        - url: http://research
-    llm:
-      loadBalancer:
-        servers:
-        - url: http://llm

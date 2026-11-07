@@ -5,15 +5,15 @@
 http:
   routers:
     # github.com/changkun/website
-    to-main:
+    to-website:
       rule: Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`)
       priority: 1
       tls:
         certResolver: changkunResolver
       middlewares:
         - gzipcompress
-        - main-errorpages
-      service: main
+        - website-errorpages
+      service: website
     # github.com/changkun/research
     # A folder in /www/changkun.de, rendered by `make deploy` there. Its own
     # router keeps the PDFs out of gzipcompress.
@@ -22,7 +22,7 @@ http:
       tls:
         certResolver: changkunResolver
       middlewares:
-        - main-errorpages
+        - website-errorpages
       service: static-changkun
     # research relevant redirectors
     to-talks:
@@ -57,7 +57,7 @@ http:
         certResolver: changkunResolver
       middlewares:
         - gzipcompress
-        - main-errorpages
+        - website-errorpages
       service: static-changkun
     # github.com/changkun/blog
     to-blog:
@@ -80,14 +80,14 @@ http:
       priority: 1
       tls:
         certResolver: changkunResolver
-      service: main
+      service: website
     # github.com/changkun/urlstat
     to-urlstat:
       rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&PathPrefix(`/urlstat`)
       tls:
         certResolver: changkunResolver
       middlewares:
-        - main-errorpages
+        - website-errorpages
       service: urlstat
     # github.com/changkun/redir
     to-redir:
@@ -95,7 +95,7 @@ http:
       tls:
         certResolver: changkunResolver
       middlewares:
-        - main-errorpages
+        - website-errorpages
       service: redir
 
     # github.com/changkun/midgard
@@ -104,7 +104,7 @@ http:
       tls:
         certResolver: changkunResolver
       middlewares:
-        - main-errorpages
+        - website-errorpages
       service: midgard
     # github.com/changkun/upbot
     to-upbot:
@@ -112,7 +112,7 @@ http:
       tls:
         certResolver: changkunResolver
       middlewares:
-        - main-errorpages
+        - website-errorpages
       service: upbot
     # github.com/changkun/go-under-the-hood
     to-golang:
@@ -121,7 +121,7 @@ http:
         certResolver: changkunResolver
       middlewares:
         - golang-redirector
-      service: main
+      service: website
     # github.com/golang-design/ssaplayground
     to-gossa:
       rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`) || Host(`golang.design`) || Host(`www.golang.design`))&&(Path(`/gossa`)||PathPrefix(`/gossa/`))
@@ -225,11 +225,11 @@ http:
         regex: "^(.*)changkun.de/ideas(.*)"
         replacement: "https://changkun.de/blog/ideas${2}"
         permanent: true
-    main-errorpages:
+    website-errorpages:
       errors:
         status:
           - "404"
-        service: main
+        service: website
         query: "/404.html"
     golang-errorpages:
       errors:
@@ -240,10 +240,10 @@ http:
     gzipcompress:
       compress: {}
   services:
-    main:
+    website:
       loadBalancer:
         servers:
-        - url: http://main
+        - url: http://website
     static-changkun:
       loadBalancer:
         servers:

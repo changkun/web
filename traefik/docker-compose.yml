@@ -11,17 +11,19 @@ services:
       - "80:80"
       - "443:443"
       - "8080:8080"
+    # The output is traefik's log and its access log, about 30 MB a day.
+    # Rotated and compressed here, it keeps about two weeks.
     logging:
       driver: json-file
       options:
-        max-size: "10m"
-        max-file: "3"
+        max-size: "50m"
+        max-file: "10"
+        compress: "true"
     networks:
       - proxy
     volumes:
       - ./traefik.yml:/etc/traefik/traefik.yml
       - ./conf:/etc/traefik/conf
-      - ./logs:/logs
 networks:
   proxy:
     driver:

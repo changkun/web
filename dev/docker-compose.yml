@@ -19,7 +19,6 @@ services:
     volumes:
       - ./traefik.yml:/etc/traefik/traefik.yml
       - ./conf:/etc/traefik/conf
-      - ./logs:/logs
 networks:
   proxy:
     name: traefik_proxy

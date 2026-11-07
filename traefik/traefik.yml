@@ -47,7 +47,6 @@ api:
 ping:
   entryPoint: "traefik"
 
-log:
-  filePath: "/logs/traefik.log"
-accessLog:
-  filePath: "/logs/access.log"
+# Both logs go to the container's output, which Docker rotates as
+# docker-compose.yml sets.
+accessLog: {}

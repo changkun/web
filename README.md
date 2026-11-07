@@ -1,6 +1,7 @@
-# website
+# infra
 
-Website services in changkun.de, golang.design, etc.
+The infrastructure of changkun.de, golang.design, etc.: the traefik proxy and
+the shared services behind it, each a Docker Compose stack in its own folder.
 
 ## Services
 

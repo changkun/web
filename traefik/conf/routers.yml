@@ -156,7 +156,7 @@ http:
       middlewares:
         - gzipcompress
         - golang-errorpages
-      service: static-golang
+      service: website
   middlewares:
     talks-redirector:
       redirectRegex:
@@ -228,7 +228,7 @@ http:
       errors:
         status:
           - "404"
-        service: static-golang
+        service: website
         query: "/404.html"
     # Text only: PDFs, images, and audio are compressed already, and
     # compressing them on the fly would also lose range requests.
@@ -253,10 +253,6 @@ http:
       loadBalancer:
         servers:
         - url: http://website
-    static-golang:
-      loadBalancer:
-        servers:
-        - url: http://www-golangdesign
     redir:
       loadBalancer:
         servers:

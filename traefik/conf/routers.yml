@@ -54,13 +54,6 @@ http:
       middlewares:
         - blog-redirector
       service: website
-    to-us:
-      rule: Host(`changkun.us`) || Host(`www.changkun.us`) || Host(`ou.changkun.us`)
-      tls:
-        certResolver: changkunResolver
-      middlewares:
-        - us-redirector
-      service: website
     # api.changkun.de
     to-api:
       rule: Host(`api.changkun.de`)
@@ -189,11 +182,6 @@ http:
       redirectRegex:
         regex: "^(.*)changkun.de/golang(.*)"
         replacement: "https://golang.design/under-the-hood/${2}"
-        permanent: true
-    us-redirector:
-      redirectRegex:
-        regex: "^(.*)changkun.us/(.*)"
-        replacement: "https://changkun.de/blog/${2}"
         permanent: true
     blog-redirector:
       redirectRegex:

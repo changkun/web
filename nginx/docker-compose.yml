@@ -3,8 +3,8 @@
 # license that can be found in the LICENSE file.
 
 # Only the local setup in dev/ uses these: its modern-cpp route points at
-# www. The host serves /www with the static server in static/, and no
-# production router points here, so do not bring these up there.
+# www. The host serves /www with changkun/website, and no production
+# router points here, so do not bring these up there.
 
 services:
   www:

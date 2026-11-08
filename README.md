@@ -6,6 +6,7 @@ the shared services behind it, each a Docker Compose stack in its own folder.
 ```bash
 traefik/    # the proxy: routes each address to its service, holds the certificates
 postgres/   # the PostgreSQL instance the services share
+dns/        # the DNS records on Cloudflare, applied with DNSControl
 dev/        # traefik for a local run on localhost
 ```
 
@@ -35,6 +36,22 @@ golang.design/go-questions     # github.com/golang-design/go-questions
 poly.red                       # github.com/changkun/redir (the import path of changkun/polyred)
 poly.red/study                 # github.com/changkun/rankui-v2
 ```
+
+## DNS
+
+The records of the zones on Cloudflare are in
+[`dns/dnsconfig.js`](dns/dnsconfig.js). Edit the file, then apply it with
+[DNSControl](https://dnscontrol.org) from `dns/`:
+
+```bash
+export CLOUDFLARE_API_TOKEN=...  # Zone Read; DNS, SSL and Certificates, Single Redirect: Edit
+dnscontrol preview               # what a push would change
+dnscontrol push
+```
+
+A push deletes records that are not in the file, so read the preview
+first. To add a zone, write its current records out with
+`dnscontrol get-zones --format=js cloudflare <zone>` and paste them in.
 
 ## License
 

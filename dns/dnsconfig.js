@@ -1,0 +1,51 @@
+// Copyright 2026 Changkun Ou. All rights reserved.
+// Use of this source code is governed by a GPL-3.0
+// license that can be found in the LICENSE file.
+
+// The DNS of the domains on Cloudflare, applied with DNSControl. A push
+// makes each zone match this file: records missing here are deleted, and
+// so are single redirect rules. Run `dnscontrol preview` first.
+
+var REG_NONE = NewRegistrar("none");
+var DSP_CLOUDFLARE = NewDnsProvider("cloudflare", {
+  manage_single_redirects: true,
+});
+
+// The droplet behind traefik.
+var SERVER = "138.68.107.228";
+
+// Mail is Google Workspace on every domain.
+var GOOGLE_MAIL = [
+  MX("@", 1, "aspmx.l.google.com."),
+  MX("@", 5, "alt1.aspmx.l.google.com."),
+  MX("@", 5, "alt2.aspmx.l.google.com."),
+  MX("@", 10, "alt3.aspmx.l.google.com."),
+  MX("@", 10, "alt4.aspmx.l.google.com."),
+];
+
+// Every zone uses Cloudflare's automatic TTL, which its API writes as 1.
+DEFAULTS(DefaultTTL(1));
+
+D("poly.red", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
+  A("@", SERVER, CF_PROXY_ON),
+  GOOGLE_MAIL,
+  TXT("@", "v=spf1 include:_spf.google.com ~all"),
+  TXT("@", "google-site-verification=_f_PMaAXzRTN7CaQ82cUuz-6VAfS5qfWNVpKqgkyhTE"),
+  TXT("google._domainkey", "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq51RstHyjefzzeopgLOnwXzreFqH3X836pINDbtsVdKAHXXdoTVvSdACBlLrA3TqxK1a/nvfvc9EcFBiLE3hjUao66eA/HswMeR0HrdKvQVG5xnyAkZg7o4MyG4PzcloragP1F6GVliR2Zb7rqDRjaudZL8Aq7uFMk8pDVPZwvG14qwtoom+O9bdio1qWtJqQyOUWFz1OHcTzpbFNoZLj0HXkvNB4gkMCu2rT5wu8ATEvszP6+HwqZw70XaG0Y2/zI7nplFqNBRvXvSvVI3KFGlB2IuvI8SDbvdFHYfVV5CtrQgDhgiwRTGXohQLxReC3kUNQEAajhXzDLfA1rx0PQIDAQAB"),
+);
+
+// changkun.us only redirects to the blog, path and query kept. Cloudflare
+// answers the redirect, so the hosts are proxied but nothing reaches the
+// server.
+D("changkun.us", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
+  A("@", SERVER, CF_PROXY_ON),
+  A("ou", SERVER, CF_PROXY_ON),
+  CNAME("www", "changkun.us.", CF_PROXY_ON),
+  CF_SINGLE_REDIRECT("changkun.us to the blog", 301,
+    'http.host in {"changkun.us" "www.changkun.us" "ou.changkun.us"}',
+    'concat("https://changkun.de/blog", http.request.uri.path)'),
+  GOOGLE_MAIL,
+  TXT("@", "v=spf1 include:_spf.google.com ~all"),
+  TXT("@", "google-site-verification=1Q8wu_zPZ1V11olfHzIHAmfzTe-WxOGXY5DDox5qjzE"),
+  TXT("google._domainkey", "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvF2JohXnnCCMhM2/083CLWQ5rAAisiQSEjHC0luCMMUSWghFE2dmbWWEts3N+FPgop0kCYo33iRmBNRrxRMA//Iz+EN0Un0PnUisKAd3xW45chviiEJFMFDz0bNFoa6NEYw7FJpwxj6uhRa1OccbLsBB5XyrKzmTYhUo5Pk37ABH9cU0JpLCLnJbJ/9UIq7uREWNG82Xag268wVDXHwne2VwddbZLmjuktQMHvcmeJ2PoRkoPyptrVBVLTMd5hi2juM1pGrL7+iteYVbmabGCQj8Psa8eHavQgneLMxsf4epbIB/7YUmRKMnEyA4tuVJaQsoJBfWzYC2sYCAvadkmwIDAQAB"),
+);

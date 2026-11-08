@@ -54,11 +54,10 @@ D("golang.design", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
   A("@", SERVER, CF_PROXY_ON),
   A("www", SERVER, CF_PROXY_ON),
   GOOGLE_MAIL,
-  TXT("@", "v=spf1 include:secureserver.net include:_spf.google.com ~all"),
+  TXT("@", "v=spf1 include:_spf.google.com ~all"),
   TXT("@", "google-site-verification=OwmHdWz2c67bUMSMcA5uobnyoKe0Z3-GLLPC9e0WwbI"),
   TXT("@", "D8008724"),
   TXT("google._domainkey", "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAothqatbrOzTPVC1/cfNFyLpvoawRU1u7wzk+YYUoFL7xyOIAOSs43z50pA3sSSDPhTTjLKVcaF35BsBTWCDTrDyiJxu8l4pCTi7cJGd9dhyDYY/JSN1/+ABPeEL7CGbovGbRbPglIC1jOdqZlArgK9OYlBEkxuQwdZ4qE8sroasx8RLRimNNZZEF33f16m4m0B1XYcC0AWvcSbtsl1FsFYrACRZhLCz4SfW+W7IeRNKdJb2NOgMZqTCyC3IrYgU/b8GJF2lB00n14U4uZSgZZGFE78cg8sCafPrq0G/dRannRrYkyaoyhmIQ9TnQFEeJr/e/jCjSG/1BBDicIlg1dwIDAQAB"),
   // DMARC reports go to Cloudflare's DMARC Management.
   TXT("_dmarc", "v=DMARC1; p=none; rua=mailto:a1c2e672918a4351b65309326ce13e73@dmarc-reports.cloudflare.net"),
-  SRV("_autodiscover._tcp", 100, 1, 443, "autodiscover.secureserver.net."),
 );

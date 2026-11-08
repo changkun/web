@@ -106,7 +106,12 @@ D("changkun.org", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
   CF_SINGLE_REDIRECT("changkun.org to changkun.de", 302,
     'http.host in {"changkun.org" "www.changkun.org"}',
     'concat("https://changkun.de", http.request.uri.path)'),
-  // changkun.org sends no mail, so receivers reject any that claims to be
-  // from it.
+  // Mail: changkun.org is a user alias domain of the Google Workspace of
+  // changkun.de, so hi@changkun.org reaches hi@changkun.de. Google set
+  // these records up itself.
+  MX("@", 10, "smtp.google.com."),
+  TXT("@", "v=spf1 include:_spf.google.com ~all"),
+  TXT("@", "google-site-verification=ZXJChZS2KsUur8ZyMr9MXJliDdHaYeSb4fV4lRMUN-o"),
+  TXT("google._domainkey", "v=DKIM1;k=rsa;p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5KjCwOlBPcReFsjcAKrjUN4SiHjLBBzF79iTHgkANyW5oompaFrJRMdoo97SmRdbg5/rSGVrdlrQggo7xeb/hh1CuYUBYdthbQdwFU9ZwJAO9w45C7kSaO6rW3y+DNDx68YIPImQz7TpD7hdfh4yzpo3h8gXCxiZ4LsGGxnEh7LnDPQ4Owbyh4TvxmACn6j8Ul+1ZxUcam8/3O3KCWrW/UVt+BY3gQzrY/pSwie00dbSLZCFucKMctEj5N18lCIGOVmGHa7pGfc+ziPm2QOHZiY+m6TMvSx7qU4oFf+OcG/mTZd/MugN5phB6vemV1mXtN3u0jdOERFtTlpPi7GQKQIDAQAB"),
   TXT("_dmarc", "v=DMARC1; p=reject;"),
 );

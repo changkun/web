@@ -70,6 +70,10 @@ D("changkun.de", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
   // ssh and the publishing workflows connect by this name, which is never
   // proxied: Cloudflare's proxy does not carry ssh.
   A("ssh", SERVER),
+  // The status page, on GitHub Pages. Not proxied: GitHub issues its
+  // certificate by reaching it directly, and the page must not depend on
+  // the server or the proxy it reports on.
+  CNAME("status", "changkun.github.io."),
   // lmu and mail only redirect, and Cloudflare answers them, so their
   // address is a placeholder nothing reaches.
   A("lmu", "192.0.2.1", CF_PROXY_ON),

@@ -54,13 +54,6 @@ http:
       middlewares:
         - blog-redirector
       service: website
-    # api.changkun.de
-    to-api:
-      rule: Host(`api.changkun.de`)
-      priority: 1
-      tls:
-        certResolver: changkunResolver
-      service: website
     # github.com/changkun/urlstat
     to-urlstat:
       rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&PathPrefix(`/urlstat`)

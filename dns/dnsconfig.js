@@ -66,7 +66,6 @@ D("changkun.de", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
   A("@", SERVER, CF_PROXY_ON),
   A("www", SERVER, CF_PROXY_ON),
   A("ou", SERVER, CF_PROXY_ON),
-  A("api", SERVER, CF_PROXY_ON),
   A("blog", SERVER, CF_PROXY_ON),
   // ssh and the publishing workflows connect by this name, which is never
   // proxied: Cloudflare's proxy does not carry ssh.

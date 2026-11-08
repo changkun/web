@@ -108,7 +108,7 @@ From scratch:
 Either way, if the address changed, set `SERVER` in `dns/dnsconfig.js` and
 push it, change the records of changkun.de, and update the `SERVER_DOMAIN`
 secrets that hold an address rather than a name. The
-[status page](https://status.changkun.de/) shows when everything is
+[status page](https://changkun.github.io/status/) shows when everything is
 back.
 
 Start a compose project only from its folder here. A container keeps the

@@ -70,6 +70,9 @@ D("changkun.de", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
   A("ou", SERVER),
   A("api", SERVER),
   A("blog", SERVER),
+  // ssh and the publishing workflows connect by this name, which is never
+  // proxied: Cloudflare's proxy does not carry ssh.
+  A("ssh", SERVER),
   // lmu and mail only redirect, and Cloudflare answers them, so their
   // address is a placeholder nothing reaches.
   A("lmu", "192.0.2.1", CF_PROXY_ON),

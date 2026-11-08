@@ -11,6 +11,7 @@ so consumers are equal clients of shared infrastructure.
 | Service | Database | Role |
 | --- | --- | --- |
 | [urlstat](https://github.com/changkun/urlstat) | `urlstat` | `urlstat` |
+| [redir](https://github.com/changkun/redir) | `redir` | `redir` |
 
 A consumer joins the `postgres_internal` network and connects to host
 `postgres` on port 5432. The instance publishes no host port and is not on

@@ -44,7 +44,7 @@ The records of the zones on Cloudflare are in
 [DNSControl](https://dnscontrol.org) from `dns/`:
 
 ```bash
-export CLOUDFLARE_API_TOKEN=...  # Zone Read; DNS, SSL and Certificates, Single Redirect: Edit
+export CLOUDFLARE_API_TOKEN=...  # All Domains: Zone Read; DNS, Dynamic URL Redirects: Edit
 dnscontrol preview               # what a push would change
 dnscontrol push
 ```

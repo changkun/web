@@ -95,3 +95,18 @@ D("changkun.de", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
   TXT("mta._domainkey.mailgun", "k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDA0yVxCr0+nb9b1/ScsJOxQnpoi8FzmhEdnpReWl/UjzxEx/NOsPPUhVjzp2QU1MwZb8Cs8sC87n50fSU/Q0fYUU8hDGMk3VlP+snAC+wGAFx+fGDxJ7B+O8SFKwzJIgs+x0trlTrBOJK+5eGmtc+i6opyNuYY8dyhruZYuvKYsQIDAQAB"),
   CNAME("email.mailgun", "eu.mailgun.org."),
 );
+
+// changkun.org redirects to changkun.de, path and query kept. Cloudflare
+// answers the redirect, so the address is a placeholder nothing reaches.
+// The redirect is temporary (302), since browsers keep a 301 for good and
+// the direction between the two may flip.
+D("changkun.org", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
+  A("@", "192.0.2.1", CF_PROXY_ON),
+  A("www", "192.0.2.1", CF_PROXY_ON),
+  CF_SINGLE_REDIRECT("changkun.org to changkun.de", 302,
+    'http.host in {"changkun.org" "www.changkun.org"}',
+    'concat("https://changkun.de", http.request.uri.path)'),
+  // changkun.org sends no mail, so receivers reject any that claims to be
+  // from it.
+  TXT("_dmarc", "v=DMARC1; p=reject;"),
+);

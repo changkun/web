@@ -62,14 +62,12 @@ D("golang.design", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
   TXT("_dmarc", "v=DMARC1; p=none; rua=mailto:a1c2e672918a4351b65309326ce13e73@dmarc-reports.cloudflare.net"),
 );
 
-// changkun.de is not proxied: ssh and the publishing workflows reach the
-// server by this name, and Cloudflare's proxy does not carry ssh.
 D("changkun.de", REG_NONE, DnsProvider(DSP_CLOUDFLARE),
-  A("@", SERVER),
-  A("www", SERVER),
-  A("ou", SERVER),
-  A("api", SERVER),
-  A("blog", SERVER),
+  A("@", SERVER, CF_PROXY_ON),
+  A("www", SERVER, CF_PROXY_ON),
+  A("ou", SERVER, CF_PROXY_ON),
+  A("api", SERVER, CF_PROXY_ON),
+  A("blog", SERVER, CF_PROXY_ON),
   // ssh and the publishing workflows connect by this name, which is never
   // proxied: Cloudflare's proxy does not carry ssh.
   A("ssh", SERVER),

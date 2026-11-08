@@ -93,14 +93,6 @@ http:
       middlewares:
         - website-errorpages
       service: midgard
-    # github.com/changkun/upbot
-    to-upbot:
-      rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&PathPrefix(`/upbot`)
-      tls:
-        certResolver: changkunResolver
-      middlewares:
-        - website-errorpages
-      service: upbot
     # github.com/changkun/go-under-the-hood
     to-golang:
       rule: (Host(`changkun.de`) || Host(`ou.changkun.de`) || Host(`www.changkun.de`))&&PathPrefix(`/golang`)
@@ -265,10 +257,6 @@ http:
       loadBalancer:
         servers:
         - url: http://midgard
-    upbot:
-      loadBalancer:
-        servers:
-        - url: http://upbot
     gossa:
       loadBalancer:
         servers:

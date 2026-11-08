@@ -26,7 +26,6 @@ changkun.de/research           # github.com/changkun/research
 changkun.de/modern-cpp         # github.com/changkun/modern-cpp-tutorial
 changkun.de/midgard            # github.com/changkun/midgard
 changkun.de/urlstat            # github.com/changkun/urlstat
-changkun.de/upbot              # github.com/changkun/upbot
 golang.design                  # github.com/golang-design/website
 golang.design/{s,x}            # github.com/changkun/redir
 golang.design/gossa            # github.com/golang-design/ssaplayground

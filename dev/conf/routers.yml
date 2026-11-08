@@ -28,12 +28,6 @@ http:
       middlewares:
         - website-errorpages
       service: midgard
-    # github.com/changkun/upbot
-    to-upbot:
-      rule: "Host(`localhost`)&&PathPrefix(`/upbot`)"
-      middlewares:
-        - website-errorpages
-      service: upbot
     # github.com/changkun/go-under-the-hood
     to-golang:
       rule: "Host(`localhost`)&&(Path(`/golang`)||PathPrefix(`/golang/`))"
@@ -94,10 +88,6 @@ http:
       loadBalancer:
         servers:
         - url: http://midgard
-    upbot:
-      loadBalancer:
-        servers:
-        - url: http://upbot
     gossa:
       loadBalancer:
         servers:
